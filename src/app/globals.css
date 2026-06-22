@@ -1,0 +1,128 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* shadcn base */
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ---------------------------
+   🌿 CLAREVA DESIGN TOKENS
+---------------------------- */
+
+:root {
+  /* Base */
+  --background: 42 33% 97%; /* #FAF8F5 */
+  --foreground: 20 20% 20%; /* #3E312B */
+
+  /* Cards */
+  --card: 30 30% 94%; /* soft beige */
+  --card-foreground: 20 20% 20%;
+
+  /* Primary (Rose Gold) */
+  --primary: 350 25% 58%; /* #B76E79 */
+  --primary-foreground: 0 0% 100%;
+
+  /* Secondary (Taupe) */
+  --secondary: 28 35% 85%; /* #D8C3B5 */
+  --secondary-foreground: 20 20% 20%;
+
+  --hero-background: #f3e5d9; /* #FAF8F5 */
+
+  /* UI States */
+  --muted: 30 25% 90%;
+  --muted-foreground: 25 10% 45%;
+
+  --border: 30 20% 85%;
+  --input: 30 20% 85%;
+  --ring: 350 25% 58%; /* rose glow focus */
+
+  /* Popovers */
+  --popover: 42 33% 97%;
+  --popover-foreground: 20 20% 20%;
+
+  /* Radius system */
+  --radius: 1.25rem;
+}
+
+/* ---------------------------
+   🧠 TAILWIND THEME MAPPING
+---------------------------- */
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-text: hsl(18 21.7% 18%);
+
+  --color-hero-background: var(--hero-background);
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --font-body: "Manrope", sans-serif;
+  --font-heading: "Cormorant Garamond", serif;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.75rem;
+  --radius-3xl: 2.25rem;
+}
+
+/* ---------------------------
+   🎨 BASE STYLES
+---------------------------- */
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: "Manrope", sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: "Cormorant Garamond", serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+  will-change: transform;
+}
