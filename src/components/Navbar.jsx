@@ -66,18 +66,18 @@ function Navbar() {
 
       {/* Actions */}
       <div className="flex gap-x-10 mr-5">
-        <Search
-          className="text-text/65 hover:text-text transition-colors"
-          size={20}
-        />
+        <Link href={"/signup"}>
         <User
           className="text-text/65 hover:text-text transition-colors"
           size={20}
-        />
+          />
+          </Link>
+          <Link href={"/cart"}>
         <ShoppingCart
           className="text-text/65 hover:text-text transition-colors"
           size={20}
-        />
+          />
+          </Link>
       </div>
     </div>
   );

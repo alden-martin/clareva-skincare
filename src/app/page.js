@@ -9,6 +9,10 @@ import ReelParent from "@/components/ReelParent";
 import Head from "next/head";
 import TypeCard from "@/components/TypeCard";
 import BeforeAfterSlider from "@/components/BeforeAfterSlider";
+import RoutineBuilder from "@/components/RoutineBuilder";
+import { number } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import Ingredeints from "@/components/Ingredeints";
 
 export default function Home() {
   const stats = [
@@ -69,46 +73,93 @@ export default function Home() {
       },
     },
   ];
-const skinTypes = [
+  const skinTypes = [
+    {
+      title: "Acne & Breakouts",
+      description: "Soothe, decongest, restore.",
+      link: "/skin-types/acne-breakouts",
+      image: "/skin-types/acne.png",
+    },
+    {
+      title: "Dry Skin",
+      description: "Deep hydration that lasts.",
+      link: "/skin-types/dry-skin",
+      image: "/skin-types/dry.png",
+    },
+    {
+      title: "Pigmentation",
+      description: "Even tone, gentle science.",
+      link: "/skin-types/pigmentation",
+      image: "/skin-types/pigmentation.png",
+    },
+    {
+      title: "Oily Skin",
+      description: "Balance without stripping.",
+      link: "/skin-types/oily-skin",
+      image: "/skin-types/oily.png",
+    },
+    {
+      title: "Sensitive Skin",
+      description: "Calming, minimal, kind.",
+      link: "/skin-types/sensitive-skin",
+      image: "/skin-types/sensitive.png",
+    },
+    {
+      title: "Dark Spots",
+      description: "Brighten with intention.",
+      link: "/skin-types/dark-spots",
+      image: "/skin-types/dark.png",
+    },
+  ];
+  const storyStates = [
+    {
+      number: "04",
+      text: "Dermatologist partners",
+    },
+    {
+      number: "28",
+      text: "Cities served in PK",
+    },
+    {
+      number: "0%",
+      text: "Animal testing, ever",
+    },
+  ];
+  const instaLink = ["DZo4IF8IHK3", "DYUbWLrIieS", "DXcSEBLjfIi"];
+  const ingredients = [
   {
-    title: "Acne & Breakouts",
-    description: "Soothe, decongest, restore.",
-    link: "/skin-types/acne-breakouts",
-    image: "/skin-types/acne.png",
+    name: "Niacinamide",
+    description:
+      "Refines pores, strengthens the barrier and visibly evens tone over 28 days.",
+    per: "10%",
   },
   {
-    title: "Dry Skin",
-    description: "Deep hydration that lasts.",
-    link: "/skin-types/dry-skin",
-    image: "/skin-types/dry.png",
+    name: "Salicylic Acid",
+    description:
+      "Lipid-soluble exfoliant that gently decongests pores prone to breakouts.",
+    per: "2%",
   },
   {
-    title: "Pigmentation",
-    description: "Even tone, gentle science.",
-    link: "/skin-types/pigmentation",
-    image: "/skin-types/pigmentation.png",
+    name: "Vitamin C",
+    description:
+      "Stabilised ascorbic acid brightens, lifts dullness and shields against pollution.",
+    per: "15%",
   },
   {
-    title: "Oily Skin",
-    description: "Balance without stripping.",
-    link: "/skin-types/oily-skin",
-    image: "/skin-types/oily.png",
+    name: "Hyaluronic Acid",
+    description:
+      "Multi-molecular hydration that plumps without heaviness — built for humid climates.",
+    per: "3-weight",
   },
   {
-    title: "Sensitive Skin",
-    description: "Calming, minimal, kind.",
-    link: "/skin-types/sensitive-skin",
-    image: "/skin-types/sensitive.png",
-  },
-  {
-    title: "Dark Spots",
-    description: "Brighten with intention.",
-    link: "/skin-types/dark-spots",
-    image: "/skin-types/dark.png",
+    name: "Ceramides",
+    description:
+      "Mimic the skin's own lipids, sealing in moisture and repairing barrier damage.",
+    per: "Complex 3",
   },
 ];
   return (
-    <div className="overflow-x-hidden">
+    <div className="">
       {/* Hero Section */}
       <section className="grid bg-hero-background grid-cols-1 lg:grid-cols-2 items-center justify-between py-20">
         {/* Left */}
@@ -225,30 +276,155 @@ by thousands"
       {/* Shop By Concern */}
       <section className="flex flex-col items-center gap-y-10">
         <Heading
-        container="flex flex-col items-center"
+          container="flex flex-col items-center"
           subHeading="Shop By Skin Concern"
           mainHeading="Begin with what your skin asks for"
         />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-10">
-          
-        {
-          skinTypes.map((skinType, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-10">
+          {skinTypes.map((skinType, index) => (
             <div key={index} className="max-h-125 max-w-125 ">
-            <TypeCard {...skinType} />
+              <TypeCard {...skinType} />
             </div>
-          ))
-        }
+          ))}
         </div>
       </section>
+      {/* Ingredients */}
+      <section className="bg-hero-background grid grid-cols-1 lg:grid-cols-2 px-20 py-20 items-center">
+          <div>
+            <Image
+            src={"/ingredient.png"}
+            alt="Ingredient"
+            width={500}
+            height={900}
+            className="rounded-2xl"
+            />
+          </div>
+          <div className="flex flex-col">
+            <Heading
+              subHeading="The Science"
+              mainHeading="Ingredients, <br/>
+              studied & sourced"
+            />
+            <Ingredeints ingredeints={ingredients}/>
+          </div>
+      </section>
       {/* Visible In Mirror */}
-      <section className="flex flex-col items-center">
-        <Heading 
+      <section className="flex flex-col items-center my-20">
+        <Heading
           container="flex flex-col items-center"
           subHeading="12 Week Results"
           mainHeading="Visible in the mirror"
         />
         {/* Before After */}
         <BeforeAfterSlider />
+      </section>
+      {/* Routine Builder */}
+      <section className="flex flex-col items-start mx-5">
+        <Heading
+          subHeading="Routine Builder"
+          mainHeading="Your ritual, <br/> four soft steps"
+        />
+        <RoutineBuilder />
+      </section>
+      {/* Our Story */}
+      <section className="grid grid-cols-1 lg:grid-cols-2 mx-20 my-20">
+        {/* Right */}
+        <div className="relative ">
+          <Image
+            src="/skin-types/dark.png"
+            alt="Our Story"
+            width={300}
+            height={400}
+            className="rounded-2xl shadow-2xl"
+          />
+          <div className="absolute bottom-10  left-20 p-5 bg-background rounded-2xl w-[45%] shadow-2xl">
+            <h1 className="text-primary font-heading text-3xl font-semibold tracking-wider">
+              est. 2024
+            </h1>
+            <p className="text-text text-xs">
+              Founded in Lahore, formulated with Pakistani dermatologists.
+            </p>
+          </div>
+        </div>
+        {/* Left */}
+        <div>
+          <Heading
+            subHeading="Our Story"
+            mainHeading="Skincare <br/> our climate deserves."
+          />
+          <div className="text-text/70 font-light space-y-6 my-5 leading-relaxed  text-lg">
+            <p>
+              Clareva was born in a Lahore summer — when shelves were full of
+              formulas built for European winters, and our skin was asking for
+              something else entirely.
+            </p>
+            <p>
+              We work alongside Pakistani dermatologists to study how heat, hard
+              water and pollution behave on melanin-rich skin. Every actives
+              percentage, every excipient, every drop is decided in clinic — not
+              in a marketing room.
+            </p>
+            <h3 className="text-text font-heading text-2xl font-semibold italic ">
+              "Clinical inside, poetic outside."
+            </h3>
+            <hr />
+            <div className="grid grid-cols-3 gap-4">
+              {storyStates.map((state, index) => (
+                <div key={index} className="flex flex-col items-start">
+                  <h2 className="text-text font-heading text-3xl font-semibold tracking-wider">
+                    {state.number}
+                  </h2>
+                  <p className="text-text text-xs">{state.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* Instagram Section */}
+      <section className="flex flex-col mx-20 my-10">
+        <div className="flex flex-row justify-between">
+          <Heading
+            subHeading="@clareva.skin"
+            mainHeading="Tag us. We re-share."
+          />
+          <a
+            href="https://www.instagram.com/clareva.skincare/"
+            className="flex items-center gap-2 hover:underline"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="lucide lucide-instagram w-4 h-4"
+              aria-hidden="true"
+            >
+              <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+            </svg>
+            Follow On Instagram
+          </a>
+        </div>
+        <div className="grid grid-cols-3 gap-4 my-5">
+          {instaLink.map((reelId, index) => (
+            <iframe
+              key={index}
+              src={`https://www.instagram.com/reel/${reelId}/embed/`}
+              width="100%"
+              height="650"
+              frameBorder="0"
+              scrolling="no"
+              allowFullScreen={true}
+            />
+          ))}
+        </div>
       </section>
     </div>
   );

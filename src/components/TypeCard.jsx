@@ -10,7 +10,7 @@ function TypeCard(skinType) {
 
   return (
     <div 
-      className='relative overflow-hidden max-h-100 rounded-2xl'
+      className='relative overflow-hidden h-96 rounded-2xl'
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -19,11 +19,11 @@ function TypeCard(skinType) {
         alt={skinType.title}
         width={400}
         height={400}
-        className='rounded-2xl hover:scale-[101%] transition-transform duration-300'
+        className='rounded-2xl hover:scale-[104%] transition-transform duration-300'
       />
-      <div className="absolute inset-0 pointer-events-none shadow-[inset_0_-60px_60px_-20px_rgba(0,0,0,0.5)] rounded-2xl" />
+      <div className="absolute inset-0 pointer-events-none shadow-[inset_0_-60px_60px_-20px_rgba(0,0,0,0.5)] hover:shadow-2xl rounded-2xl" />
 
-      <h1 className={`absolute text-primary-foreground ${!isHovered ? "bottom-0" : "bottom-6"} left-0 right-0 p-4 rounded-t-2xl text-3xl font-bold transition-all duration-300`}>
+      <h1 className={`absolute text-primary-foreground ${!isHovered ? "bottom-0" : "bottom-6"} left-0 right-0 p-4 rounded-t-2xl text-4xl font-bold transition-all duration-300`}>
         {skinType.title}
       </h1>
       <motion.span 
@@ -32,7 +32,7 @@ function TypeCard(skinType) {
         animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 20 }}
         transition={{ duration: 0.3 }}
       >
-        <p className='text-primary-foreground text-xs font-light'>{skinType.description}</p>
+        <p className='text-primary-foreground text-sm font-light'>{skinType.description}</p>
       </motion.span>
       {/* Redirect link */}
       <motion.span
