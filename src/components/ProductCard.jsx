@@ -1,8 +1,9 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
-function ProductCard({ name, price, pros }) {
+function ProductCard({ name, price, pros, id , image }) {
   const [isHovered, setIsHovered] = React.useState(false);
   return (
     <div
@@ -10,9 +11,10 @@ function ProductCard({ name, price, pros }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      <Link href={`/product/${id}`}>
       <div className="relative">
         <Image
-          src="/card1.png"
+          src={image}
           alt={name}
           width={500}
           height={500}
@@ -31,6 +33,7 @@ function ProductCard({ name, price, pros }) {
         <p className="text-[12px] font-body text-text/50">{pros}</p>
         <p className="text-primary text-sm font-bold">PKR {price}</p>
       </div>
+      </Link>
     </div>
   );
 }

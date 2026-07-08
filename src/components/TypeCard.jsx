@@ -10,7 +10,7 @@ function TypeCard(skinType) {
 
   return (
     <div 
-      className='relative overflow-hidden h-96 rounded-2xl'
+      className='relative overflow-hidden h-64 rounded-2xl'
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

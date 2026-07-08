@@ -13,7 +13,7 @@ import RoutineBuilder from "@/components/RoutineBuilder";
 import { number } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Ingredeints from "@/components/Ingredeints";
-
+import {products} from '@/utils/products'
 export default function Home() {
   const stats = [
     {
@@ -108,7 +108,7 @@ export default function Home() {
       title: "Dark Spots",
       description: "Brighten with intention.",
       link: "/skin-types/dark-spots",
-      image: "/skin-types/dark.png",
+      image: "/skin-types/dark.jpeg",
     },
   ];
   const storyStates = [
@@ -159,64 +159,65 @@ export default function Home() {
   },
 ];
   return (
-    <div className="">
+    <div className=" ">
       {/* Hero Section */}
-      <section className="grid bg-hero-background grid-cols-1 lg:grid-cols-2 items-center justify-between py-20">
-        {/* Left */}
-        <div className="px-10 py-20">
-          {/* heading */}
-          <h1 className="font-heading text-[clamp(3rem,7vw,6.5rem)] leading-[0.95] text-text font-bold">
-            Quiet rituals.
-            <br />
-            <span className="text-primary font-heading italic">Radiant </span>
-            results
-          </h1>
-          {/* Description */}
-          <p className="text-text/50 font-light text-lg w-[90%] my-5">
-            Dermatologist-backed skincare formulated for the climate, water and
-            skin of South Asia — clinical inside, poetic outside.
-          </p>
-          {/* Button Container */}
-          <div className="flex gap-x-5 my-10">
-            <CtaButton>Shop The Edit</CtaButton>
-            <OutlineButton>Build My Routine</OutlineButton>
-          </div>
-          {/* Stats */}
-          <div className="flex gap-x-10">
-            {stats.map((stat, idx) => (
-              <div
-                key={idx}
-                className={`${idx % 2 === 0 ? "border-r border-primary/50 pr-10" : ""}`}
-              >
-                <h1 className="text-text text-3xl font-bold  capitalize hover:text-text transition-colors mb-2">
-                  {stat.number}
-                </h1>
-                <p className="text-primary hover:text-text transition-colors text-xs  uppercase ">
-                  {stat.label}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-        {/* Right */}
-        <div className="relative min-h-[650px] px-10 py-20">
-          <Image
-            src="/hero/hero-image-01.png"
-            alt="Hero"
-            width={500}
-            height={700}
-            className="absolute top-10 right-10 w-[60%] h-[500px] object-cover rounded-4xl shadow-2xl"
-          />
+      <section className="relative min-h-screen overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 bg-[url('/hero/new-hero.jpeg')] bg-cover bg-center" />
 
-          <Image
-            src="/hero/hero-image-02.png"
-            alt="Hero"
-            width={350}
-            height={350}
-            className="absolute bottom-0 left-0 w-[45%] h-[320px] object-cover rounded-4xl shadow-2xl"
-          />
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-linear-to-r from-hero-background via-hero-background/90 via-30% to-transparent" />
+
+        {/* Content */}
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 items-center min-h-screen">
+          {/* Left */}
+          <div className="px-10 py-20 mt-20">
+            {/* heading */}
+            <h1 className="font-heading text-[clamp(3rem,7vw,6.5rem)] leading-[0.95] text-text font-bold">
+              Quiet rituals.
+              <br />
+              <span className="text-primary font-heading italic">
+                Radiant
+              </span>{" "}
+              results
+            </h1>
+
+            {/* Description */}
+            <p className="text-text/50 font-light text-lg w-[90%] my-5">
+              Dermatologist-backed skincare formulated for the climate, water
+              and skin of South Asia — clinical inside, poetic outside.
+            </p>
+
+            {/* Button Container */}
+            <div className="flex gap-x-5 my-10">
+              <CtaButton>Shop The Edit</CtaButton>
+              <OutlineButton>Build My Routine</OutlineButton>
+            </div>
+
+            {/* Stats */}
+            <div className="flex gap-x-10">
+              {stats.map((stat, idx) => (
+                <div
+                  key={idx}
+                  className={`${
+                    idx % 2 === 0 ? "border-r border-primary/50 pr-10" : ""
+                  }`}
+                >
+                  <h1 className="text-text text-3xl font-bold capitalize mb-2">
+                    {stat.number}
+                  </h1>
+
+                  <p className="text-primary text-xs uppercase">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Empty right column keeps text on left */}
+          <div />
         </div>
       </section>
+
       {/* Features Line */}
       <div className="bg-background py-8  overflow-hidden border-b border-primary/20">
         <div className="flex w-max animate-marquee">
@@ -239,7 +240,7 @@ export default function Home() {
         {productLine.map((line, index) => (
           <div key={index} className="flex flex-col items-center">
             <Image
-              src={`/products/${index + 1}.png`}
+              src={`/productsLine/${index + 1}.png`}
               className="rounded-full"
               alt={line}
               width={100}
@@ -259,7 +260,7 @@ export default function Home() {
         <Heading
           subHeading="The Edit"
           mainHeading="Best loved <br/>
-by thousands"
+          by thousands"
         />
         <div className="relative">
           <ProductList />
@@ -290,23 +291,23 @@ by thousands"
       </section>
       {/* Ingredients */}
       <section className="bg-hero-background grid grid-cols-1 lg:grid-cols-2 px-20 py-20 items-center">
-          <div>
-            <Image
+        <div>
+          <Image
             src={"/ingredient.png"}
             alt="Ingredient"
             width={500}
             height={900}
             className="rounded-2xl"
-            />
-          </div>
-          <div className="flex flex-col">
-            <Heading
-              subHeading="The Science"
-              mainHeading="Ingredients, <br/>
+          />
+        </div>
+        <div className="flex flex-col">
+          <Heading
+            subHeading="The Science"
+            mainHeading="Ingredients, <br/>
               studied & sourced"
-            />
-            <Ingredeints ingredeints={ingredients}/>
-          </div>
+          />
+          <Ingredeints ingredeints={ingredients} />
+        </div>
       </section>
       {/* Visible In Mirror */}
       <section className="flex flex-col items-center my-20">
@@ -327,22 +328,22 @@ by thousands"
         <RoutineBuilder />
       </section>
       {/* Our Story */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 mx-20 my-20">
+      <section className="grid grid-cols-1 lg:grid-cols-2 mx-20 my-20 items-center">
         {/* Right */}
-        <div className="relative ">
+        <div className="relative h-fit">
           <Image
-            src="/skin-types/dark.png"
+            src="/Story.png"
             alt="Our Story"
             width={300}
             height={400}
             className="rounded-2xl shadow-2xl"
           />
-          <div className="absolute bottom-10  left-20 p-5 bg-background rounded-2xl w-[45%] shadow-2xl">
+          <div className="absolute -bottom-10  left-20 p-5 bg-background rounded-2xl w-[45%] shadow-2xl">
             <h1 className="text-primary font-heading text-3xl font-semibold tracking-wider">
               est. 2024
             </h1>
             <p className="text-text text-xs">
-              Founded in Lahore, formulated with Pakistani dermatologists.
+              Founded in Karachi, formulated with Pakistani dermatologists.
             </p>
           </div>
         </div>
@@ -354,7 +355,7 @@ by thousands"
           />
           <div className="text-text/70 font-light space-y-6 my-5 leading-relaxed  text-lg">
             <p>
-              Clareva was born in a Lahore summer — when shelves were full of
+              Clareva was born in a Karachi summer — when shelves were full of
               formulas built for European winters, and our skin was asking for
               something else entirely.
             </p>

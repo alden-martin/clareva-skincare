@@ -7,37 +7,12 @@ import "swiper/css/navigation";
 import "swiper/css";
 import "swiper/css/pagination";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { products } from "@/utils/products";
 
 function ProductList() {
   const prevBtn = useRef(null);
   const nextBtn = useRef(null);
-  const products = [
-    {
-      name: "Gentle Clarifying Cleanser",
-      pros: "Acne-prone · Sulphate-free",
-      price: 2400,
-    },
-    {
-      name: "Gentle Clarifying Cleanser",
-      pros: "Acne-prone · Sulphate-free",
-      price: 1400,
-    },
-    {
-      name: "Gentle Clarifying Cleanser",
-      pros: "Acne-prone · Sulphate-free",
-      price: 400,
-    },
-    {
-      name: "Gentle Clarifying Cleanser",
-      pros: "Acne-prone · Sulphate-free",
-      price: 400,
-    },
-    {
-      name: "Gentle Clarifying Cleanser",
-      pros: "Acne-prone · Sulphate-free",
-      price: 400,
-    },
-  ];
+
 
   return (
     <>
@@ -85,7 +60,9 @@ function ProductList() {
             <ProductCard
               name={product.name}
               price={product.price}
-              pros={product.pros}
+              pros={product.tagline}
+              id={product.id}
+              image={product.image}
             />
           </SwiperSlide>
         ))}

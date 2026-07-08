@@ -129,7 +129,7 @@ function Footer() {
           {/* Right column: Navigation links */}
           <div className="lg:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-8 text-sm">
             <div>
-              <div className="text-[11px] tracking-[0.3em] uppercase text-primary-foreground/50 mb-5 font-body" >
+              <div className="text-[11px] tracking-[0.3em] uppercase text-primary-foreground/50 mb-5 font-body">
                 Shop
               </div>
               <ul className="space-y-3">
@@ -183,7 +183,7 @@ function Footer() {
         </div>
         {/* Bottom section: Copyright and social links */}
         <div className="pt-8 flex flex-col md:flex-row gap-4 md:items-center md:justify-between text-xs text-primary-foreground/40">
-          <div>© 2026 Clareva. Made with care in Lahore, Pakistan.</div>
+          <div>© 2026 Clareva. Made with care in Karachi, Pakistan.</div>
           <div className="flex items-center gap-5">
             {socialLinks.map((social) => (
               <a
