@@ -415,7 +415,7 @@ export default function Story() {
             daily ritual — and their long-term investment in skin.
           </p>
         </div>
-        <div className="grid grid-cols-4 grid-rows-2 gap-4 mt-5">
+        <div className="grid grid-cols-4  gap-4 mt-5">
           {whyChooseClareva.map((why, index) => (
             <div
               key={why.id}
@@ -427,15 +427,56 @@ export default function Story() {
                 {index > 10 ? `0${index + 1}` : `${index + 1}`}
               </span>
               <div className="bg-secondary w-fit rounded-full p-5">
-                {why.icon}
+                <why.icon className="text-primary" />
               </div>
-              <h3 className="font-heading text-3xl font-semibold">
-                {why.title}
-              </h3>
+              <h3 className="font-heading text-3xl font-normal">{why.title}</h3>
               <p className="text-text/80 text-lg">{why.description}</p>
             </div>
           ))}
         </div>
+      </section>
+      {/* Our Vision */}
+      <section className="my-20 flex flex-col items-center">
+        <Heading
+          container="flex flex-col items-center gap-y-5 justify-center text-center w-1/2"
+          subHeading={"Our Vision"}
+          mainHeading={
+            "To become one of Pakistan's most trusted skincare brands — empowering people to feel confident in their natural beauty."
+          }
+        />
+        <p className="text-text/70 text-xl mt-5 w-[60%] text-center">
+          Through effective, science-inspired formulations that honour every
+          skin, every day, and every step of the journey.
+        </p>
+      </section>
+      {/* Join Us */}
+          <section className="bg-[url('/join-about.png')] flex flex-col items-start py-40 px-10 gap-y-10 relative z-20">
+          {/* Overlay */}
+              <div className="bg-secondary/50  w-full h-full absolute top-0 left-0 z-10"></div>
+              <div className="w-[70%] flex flex-col gap-y-10 relative z-20">
+                  
+        <Heading
+          mainHeading={"Join the Clareva community."}
+          subHeading={"Join Us"}
+        />
+        <p className="text-text/80 text-lg">
+          Thousands of people are embracing healthier skincare habits with
+          Clareva every day. Whether you're beginning your skincare journey or
+          refining an established routine, we're here to help you discover
+          products that bring out your skin's natural radiance.
+        </p>
+        <h4 className="text-3xl font-heading ">Because healthy skin isn't a trend — it's a lifelong investment.
+
+                  </h4>
+                  <div className="flex flex-row gap-x-5">
+                  <CtaButton>
+                      Shop Now
+                  </CtaButton>
+                  <OutlineButton>
+                      Build My Routine
+                  </OutlineButton>
+                  </div>
+          </div>
       </section>
     </div>
   );

@@ -1,5 +1,5 @@
 "use client";
-import { Cross, Search, ShoppingCart, User, X } from "lucide-react";
+import { Cross, Search, ShoppingCart, User, X, Menu } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
   // Configuration for navbar styles per page
@@ -26,6 +27,10 @@ function Navbar() {
       scrolled: "bg-background/90",
     },
     "/contact": {
+      default: "bg-linear-to-r from-hero-background to-transparent to-30%",
+      scrolled: "bg-background/90",
+    },
+    "/shop": {
       default: "bg-linear-to-r from-hero-background to-transparent to-30%",
       scrolled: "bg-background/90",
     },
@@ -64,18 +69,18 @@ function Navbar() {
       name: "Shop",
       href: "/shop",
     },
-    {
-      name: "Skin Concerns",
-      href: "/skin-concerns",
-    },
-    {
-      name: "Ingredients",
-      href: "/ingredients",
-    },
-    {
-      name: "Routine",
-      href: "/routine",
-    },
+    // {
+    //   name: "Skin Concerns",
+    //   href: "/skin-concerns",
+    // },
+    // {
+    //   name: "Ingredients",
+    //   href: "/ingredients",
+    // },
+    // {
+    //   name: "Routine",
+    //   href: "/routine",
+    // },
     {
       name: "Our Story",
       href: "/story",
@@ -99,8 +104,8 @@ function Navbar() {
             Clareva
           </h1>
         </Link>
-        {/* Navigation */}
-        <ul className="flex gap-x-14 ">
+        {/* Desktop Navigation */}
+        <ul className="hidden lg:flex gap-x-14">
           {pages.map((page, idx) => (
             <li key={idx}>
               <Link
@@ -117,7 +122,7 @@ function Navbar() {
       </div>
 
       {/* Actions */}
-      <div className="flex gap-x-10 mr-5">
+      <div className="flex gap-x-10 mr-5 items-center">
         <Link href={"/signup"}>
           <User
             className={`${scrolled ? "text-text/65 hover:text-text" : "text-white hover:text-white"} transition-colors`}
@@ -126,6 +131,15 @@ function Navbar() {
         </Link>
         <button onClick={() => setCartOpen(true)}>
           <ShoppingCart
+            className={`${scrolled ? "text-text/65 hover:text-text" : "text-white hover:text-white"} transition-colors`}
+            size={20}
+          />
+        </button>
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="lg:hidden"
+        >
+          <Menu
             className={`${scrolled ? "text-text/65 hover:text-text" : "text-white hover:text-white"} transition-colors`}
             size={20}
           />
@@ -167,6 +181,46 @@ function Navbar() {
               <button className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors">
                 Checkout
               </button>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <motion.div
+          initial={{ opacity: 0, x: -100 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -100 }}
+          className="fixed inset-0 bg-black/50 z-50"
+        >
+          <div className="absolute left-0 top-0 h-full w-full max-w-md bg-background shadow-xl flex flex-col">
+            {/* Mobile Menu Header */}
+            <div className="flex items-center justify-between p-6 border-b border-border">
+              <h1 className="text-2xl font-heading font-bold">Menu</h1>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 hover:bg-secondary rounded-lg transition-colors"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            {/* Navigation Links */}
+            <div className="flex-1 overflow-y-auto p-6">
+              <ul className="flex flex-col gap-y-6">
+                {pages.map((page, idx) => (
+                  <li key={idx}>
+                    <Link
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-text/65 hover:text-text transition-colors text-[18px] font-body uppercase"
+                      href={page.href}
+                    >
+                      {page.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </motion.div>

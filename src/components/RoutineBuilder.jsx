@@ -15,9 +15,9 @@ function RoutineBuilder() {
     }
    
   return (
-    <div className='relative flex flex-col items-center mb-10'>
+    <div className='relative flex flex-col  items-center mb-10'>
         {/* Toggle Button */}
-    <div className='flex gap-x-4 bg-white rounded-2xl p-1 absolute right-0 -top-14' onClick={() => setMorningState(!morningState)}>
+    <div className='flex gap-x-4 bg-white rounded-2xl p-1 absolute left-10 lg:right-0 lg:-top-14 top-5' onClick={() => setMorningState(!morningState)}>
       <button  className={`cursor-pointer p-4 rounded-2xl font-body flex flex-row gap-x-1 transition duration-300 ${morningState  ? "bg-black text-white" : "bg-white text-black"}`}>
         <Sun/>
         Morning
@@ -28,7 +28,7 @@ function RoutineBuilder() {
       </button>
     </div>
     {/* Routine Cards */}
-    <div className='grid grid-cols-1 my-10 items-center lg:grid-cols-4 gap-x-4'>
+    <div className='grid grid-cols-1 my-10 items-center lg:grid-cols-4 gap-x-4 gap-y-5 w-full justify-center mt-30'>
         {
             morningState  ? (
                 morning.map((item) => (
