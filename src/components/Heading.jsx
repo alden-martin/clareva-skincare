@@ -8,7 +8,7 @@ function Heading({ subHeading, mainHeading , container="" , headingClass }) {
         - {subHeading}
       </h6>
       <h1
-        className={`${headingClass ? headingClass : "text-7xl italic font-bold"}`}
+        className={`${headingClass ? headingClass : "text-7xl italic font-bold lg:text-start text-center"}`}
         dangerouslySetInnerHTML={{ __html: mainHeading }}
       />
     </div>

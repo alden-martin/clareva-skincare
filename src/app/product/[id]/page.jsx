@@ -109,7 +109,7 @@ function page() {
   };
   return (
     <div className="mt-30 mb-24">
-      <div className="grid grid-cols-1 lg:grid-cols-2 mx-20 items-center justify-between">
+      <div className="grid grid-cols-1 lg:grid-cols-2 mx-5 lg:mx-20 items-center justify-between">
         {/* Left */}
         <div>
           <Image
@@ -120,7 +120,7 @@ function page() {
           />
         </div>
         {/* Right */}
-        <div className="flex flex-col items-start my-5">
+        <div className="flex flex-col items-start my-5 gap-y-1 ">
           {/* Title */}
           <h1 className="text-4xl font-bold">
             {product.name}
@@ -128,19 +128,19 @@ function page() {
           {/* Tagline */}
           <p className="text-sm text-text/50">{product.tagline}</p>
           {/* Prize */}
-          <p className="text-lg font-semibold">{product.price}</p>
+          <p className="text-lg font-semibold">{"PKR"+" "+product.price}</p>
           {/* size */}
           <div className="flex flex-row items-start gap-x-2">
           <h4 className="font-bold text-base">Size: </h4>
           <p className="text-base font-semibold text-text/80">{ product.size}</p>
           </div>
           {/* Sections */}
-          <div className="mt-6 space-y-2">
+          <div className="mt-6 space-y-2 w-[90vw]">
             {sections.map((section) => (
               <div key={section.key} className="border-b border-border">
                 <button
                   onClick={() => toggleSection(section.key)}
-                  className="w-125 text-left py-3 flex justify-between items-center hover:text-primary transition-colors"
+                  className="lg:w-125 w-[90vw] text-left py-3 flex justify-between items-center hover:text-primary transition-colors"
                 >
                   <h2 className="text-2xl font-bold">{section.heading}</h2>
                   <motion.span

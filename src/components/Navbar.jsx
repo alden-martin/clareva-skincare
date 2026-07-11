@@ -14,12 +14,12 @@ function Navbar() {
   const navbarStyles = {
     "/": {
       default: "bg-linear-to-r from-hero-background to-transparent to-30%",
-      scrolled: "bg-background/90",
+      scrolled: "bg-background/70 backdrop-blur-sm",
     },
     // Use startsWith for dynamic routes like /product/1, /product/2, etc.
     "/product": {
       match: "startsWith",
-      default: "bg-background",
+      default: "bg-secondary/90",
       scrolled: "bg-background/90",
     },
     "/story": {

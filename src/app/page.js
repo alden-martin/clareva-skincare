@@ -236,9 +236,9 @@ export default function Home() {
         </div>
       </div>
       {/* Product Line */}
-      <section className="flex justify-between items-center px-10 py-5">
+      <section className="flex justify-between items-center px-0 flex-wrap lg:flex-nowrap gap-y-3 lg:gap-y-0 lg:px-10 py-5">
         {productLine.map((line, index) => (
-          <div key={index} className="flex flex-col items-center">
+          <div key={index} className="flex flex-col items-center ">
             <Image
               src={`/productsLine/${index + 1}.png`}
               className="rounded-full"
@@ -262,7 +262,7 @@ export default function Home() {
           mainHeading="Best loved <br/>
           by thousands"
         />
-        <div className="relative">
+        <div className="relative ">
           <ProductList />
         </div>
       </section>
@@ -290,14 +290,14 @@ export default function Home() {
         </div>
       </section>
       {/* Ingredients */}
-      <section className="bg-hero-background grid grid-cols-1 lg:grid-cols-2 px-20 py-20 items-center">
+      <section className="bg-hero-background grid grid-cols-1 lg:grid-cols-2 lg:px-20 px-5 py-20 items-center">
         <div>
           <Image
             src={"/ingredient.png"}
             alt="Ingredient"
             width={500}
             height={900}
-            className="rounded-2xl"
+            className="rounded-2xl mb-5 lg:mb-0"
           />
         </div>
         <div className="flex flex-col">
@@ -310,7 +310,7 @@ export default function Home() {
         </div>
       </section>
       {/* Visible In Mirror */}
-      <section className="flex flex-col items-center my-20">
+      <section className="flex flex-col items-center my-20 mx-5 lg:mx-0">
         <Heading
           container="flex flex-col items-center"
           subHeading="12 Week Results"
@@ -328,17 +328,17 @@ export default function Home() {
         <RoutineBuilder />
       </section>
       {/* Our Story */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 mx-20 my-20 items-center">
+      <section className="grid grid-cols-1 lg:grid-cols-2 mx-5 lg:mx-20 my-20 items-center">
         {/* Right */}
-        <div className="relative h-fit">
+        <div className="relative h-fit mb-20 lg:mb-0 ">
           <Image
-            src="/Story.png"
+            src="/Story-contact.png"
             alt="Our Story"
-            width={300}
-            height={400}
-            className="rounded-2xl shadow-2xl"
+            width={200}
+            height={300}
+            className="rounded-2xl shadow-2xl w-full lg:w-auto"
           />
-          <div className="absolute -bottom-10  left-20 p-5 bg-background rounded-2xl w-[45%] shadow-2xl">
+          <div className="absolute -bottom-10 w-full left-0 lg:left-20 p-5 bg-background rounded-2xl lg:w-[45%] shadow-2xl">
             <h1 className="text-primary font-heading text-3xl font-semibold tracking-wider">
               est. 2024
             </h1>
@@ -383,8 +383,8 @@ export default function Home() {
         </div>
       </section>
       {/* Instagram Section */}
-      <section className="flex flex-col mx-20 my-10">
-        <div className="flex flex-row justify-between">
+      <section className="flex flex-col mx-5 items-center lg:mx-20 my-10">
+        <div className="flex flex-col lg:flex-row justify-between w-auto lg:w-full lg:items-center">
           <Heading
             subHeading="@clareva.skin"
             mainHeading="Tag us. We re-share."
@@ -413,7 +413,7 @@ export default function Home() {
             Follow On Instagram
           </a>
         </div>
-        <div className="grid grid-cols-3 gap-4 my-5">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 my-5">
           {instaLink.map((reelId, index) => (
             <iframe
               key={index}

@@ -62,7 +62,7 @@ export default function BeforeAfterSlider() {
         alt="Before After"
         width={1000}
         height={1000}
-        className="block w-full h-auto"
+        className="block w-full h-auto "
         draggable={false}
       />
 
