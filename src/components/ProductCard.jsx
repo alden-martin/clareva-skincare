@@ -2,8 +2,10 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-function ProductCard({ name, price, pros, id , image }) {
+function ProductCard({ name, price, pros, id, image }) {
+  const router = useRouter()
   const [isHovered, setIsHovered] = React.useState(false);
   return (
     <div
@@ -21,9 +23,11 @@ function ProductCard({ name, price, pros, id , image }) {
           className="w-full h-auto rounded-2xl object-cover"
         />
         {isHovered && (
-          <button className="bg-secondary text-secondary-foreground px-4 py-2 rounded-lg absolute bottom-5 left-1/2 -translate-x-1/2 transition-all hover:bg-primary hover:text-primary-foreground">
+            <button className="bg-secondary text-secondary-foreground px-4 py-2 rounded-lg absolute bottom-5 left-1/2 -translate-x-1/2 transition-all hover:bg-primary hover:text-primary-foreground"
+            onClick={()=>{router.push(`/product/${id}`)}}
+            >
             <span className="mr-2">+</span>
-            Quick Add
+        Add To Cart
           </button>
         )}
       </div>

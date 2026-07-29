@@ -163,10 +163,10 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative min-h-screen overflow-hidden">
         {/* Background Image */}
-        <div className="absolute inset-0 bg-[url('/hero/new-hero.jpeg')] bg-cover bg-center" />
+        <div className="absolute inset-0 bg-[url('/hero/new-hero.jpeg')] bg-cover lg:bg-center bg-position-[90%] " />
 
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-linear-to-r from-hero-background via-hero-background/90 via-30% to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-r from-hero-background via-hero-background/90 via-30% to-transparent opacity-90 lg:opacity-100" />
 
         {/* Content */}
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 items-center min-h-screen">
@@ -183,19 +183,19 @@ export default function Home() {
             </h1>
 
             {/* Description */}
-            <p className="text-text/50 font-light text-lg w-[90%] my-5">
+            <p className="text-text/80 font-light text-lg w-[90%] my-5">
               Dermatologist-backed skincare formulated for the climate, water
               and skin of South Asia — clinical inside, poetic outside.
             </p>
 
             {/* Button Container */}
-            <div className="flex gap-x-5 my-10">
+            <div className="flex gap-x-5 my-10 flex-col lg:flex-row gap-y-5 lg:gap-y-0">
               <CtaButton>Shop The Edit</CtaButton>
               <OutlineButton>Build My Routine</OutlineButton>
             </div>
 
             {/* Stats */}
-            <div className="flex gap-x-10">
+            <div className="flex gap-x-10 ">
               {stats.map((stat, idx) => (
                 <div
                   key={idx}
@@ -320,7 +320,7 @@ export default function Home() {
         <BeforeAfterSlider />
       </section>
       {/* Routine Builder */}
-      <section className="flex flex-col items-start mx-5">
+      <section className="flex flex-col lg:items-start items-center  mx-5">
         <Heading
           subHeading="Routine Builder"
           mainHeading="Your ritual, <br/> four soft steps"

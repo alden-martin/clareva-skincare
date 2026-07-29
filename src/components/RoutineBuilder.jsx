@@ -17,7 +17,7 @@ function RoutineBuilder() {
   return (
     <div className='relative flex flex-col  items-center mb-10 lg:w-auto lg:max-w-full -ml-5 lg:ml-0 w-screen'>
         {/* Toggle Button */}
-    <div className='flex gap-x-4 bg-white rounded-2xl p-1 absolute left-14 lg:right-0 lg:-top-14 top-5' onClick={() => setMorningState(!morningState)}>
+    <div className='flex gap-x-4 bg-white rounded-2xl p-1 absolute left-[50%] -translate-x-1/2 lg:left-[80%] lg:right-0 lg:top-4 top-5 w-fit' onClick={() => setMorningState(!morningState)}>
       <button  className={`cursor-pointer p-4 rounded-2xl font-body flex flex-row gap-x-1 transition duration-300 ${morningState  ? "bg-black text-white" : "bg-white text-black"}`}>
         <Sun/>
         Morning

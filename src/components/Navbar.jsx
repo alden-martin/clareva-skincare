@@ -1,42 +1,75 @@
 "use client";
-import { Cross, Search, ShoppingCart, User, X, Menu } from "lucide-react";
+import {
+  Cross,
+  Search,
+  ShoppingCart,
+  User,
+  X,
+  Menu,
+  Trash2,
+} from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useUser } from "@/contexts/UserContext";
+import { useCart } from "@/contexts/CartContext";
+import toast from "react-hot-toast";
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-
+  const { user } = useUser();
+  const { cartItems, cartProducts, removeFromCart, getCartCount, getSubtotal } =
+    useCart();
+  const router = useRouter();
   // Configuration for navbar styles per page
   const navbarStyles = {
     "/": {
-      default: "bg-linear-to-r from-hero-background to-transparent to-30%",
+      default:
+        "bg-linear-to-r from-hero-background/50 lg:from-hero-background to-transparent to-30%",
       scrolled: "bg-background/70 backdrop-blur-sm",
+      iconStyle: "text-white hover:text-white",
+      scrollIcon: "text-text/65 hover:text-text",
     },
     // Use startsWith for dynamic routes like /product/1, /product/2, etc.
     "/product": {
       match: "startsWith",
       default: "bg-secondary/90",
       scrolled: "bg-background/90",
+      iconStyle: "text-white hover:text-white",
+      scrollIcon: "text-text/65 hover:text-text",
     },
     "/story": {
       default: "bg-secondary",
       scrolled: "bg-background/90",
+      iconStyle: "text-white hover:text-white",
+      scrollIcon: "text-text/65 hover:text-text",
     },
     "/contact": {
       default: "bg-linear-to-r from-hero-background to-transparent to-30%",
       scrolled: "bg-background/90",
+      iconStyle: "text-white hover:text-white",
+      scrollIcon: "text-text/65 hover:text-text",
     },
     "/shop": {
       default: "bg-linear-to-r from-hero-background to-transparent to-30%",
       scrolled: "bg-background/90",
+      iconStyle: "text-white hover:text-white",
+      scrollIcon: "text-text/65 hover:text-text",
     },
-    "/story": {
-      default: "bg-linear-to-r from-hero-background to-transparent to-30%",
-      scrolled: "bg-background/90",
+    "/user": {
+      default: "bg-background",
+      scrolled: "bg-background/80",
+      iconStyle: "text-text/65 hover:text-text",
+      scrollIcon: "text-text/65 hover:text-text",
+    },
+    "/checkout": {
+      default: "bg-card",
+      scrolled: "bg-background/80",
+      iconStyle: "text-text/65 hover:text-text",
+      scrollIcon: "text-text/65 hover:text-text",
     },
     // Add more pathnames as needed
   };
@@ -50,6 +83,11 @@ function Navbar() {
   })?.[1] || {
     default: "bg-hero-background",
     scrolled: "bg-background/90",
+    iconStyle: "text-white hover:text-white",
+    scrollIcon: "text-text/65 hover:text-text",
+  };
+  const getTotalCartCount = () => {
+    return getCartCount();
   };
 
   useEffect(() => {
@@ -123,17 +161,30 @@ function Navbar() {
 
       {/* Actions */}
       <div className="flex gap-x-10 mr-5 items-center">
-        <Link href={"/signup"}>
+        <Link href={user ? "/user" : "/signup"}>
           <User
-            className={`${scrolled ? "text-text/65 hover:text-text" : "text-white hover:text-white"} transition-colors`}
+            className={`${scrolled ? currentStyle.scrollIcon : currentStyle.iconStyle} transition-colors`}
             size={20}
           />
         </Link>
-        <button onClick={() => setCartOpen(true)}>
+        <button
+          onClick={() => {
+            if (!user) {
+              router.push("/login");
+            }
+            setCartOpen(true);
+          }}
+          className="relative cursor-pointer"
+        >
           <ShoppingCart
-            className={`${scrolled ? "text-text/65 hover:text-text" : "text-white hover:text-white"} transition-colors`}
+            className={`${scrolled ? currentStyle.scrollIcon : currentStyle.iconStyle} transition-colors`}
             size={20}
           />
+          {getTotalCartCount() > 0 && (
+            <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              {getTotalCartCount()}
+            </span>
+          )}
         </button>
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -151,14 +202,21 @@ function Navbar() {
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 100 }}
-          className="fixed inset-0 bg-black/50 z-50"
+          className="fixed inset-0 bg-black/50 z-50 h-screen"
         >
           <div className="absolute right-0 top-0 h-full w-full max-w-md bg-background shadow-xl flex flex-col">
             {/* Cart Header */}
             <div className="flex items-center justify-between p-6 border-b border-border">
               <h1 className="text-2xl font-heading font-bold">Cart</h1>
               <button
-                onClick={() => setCartOpen(false)}
+                onClick={() => {
+                  if (!user) {
+                    // TODO: Show login modal or redirect to login
+                    console.log("Please login to view cart");
+                    router.push("/signin");
+                  }
+                  setCartOpen(false);
+                }}
                 className="p-2 hover:bg-secondary rounded-lg transition-colors"
               >
                 <X size={24} />
@@ -167,18 +225,63 @@ function Navbar() {
 
             {/* Cart Items */}
             <div className="flex-1 overflow-y-auto p-6">
-              <p className="text-text/65 text-center py-10">
-                Your cart is empty
-              </p>
+              {cartProducts.length === 0 ? (
+                <p className="text-text/65 text-center py-10">
+                  Your cart is empty
+                </p>
+              ) : (
+                <div className="flex flex-col gap-4">
+                  {cartProducts.map((product) => (
+                    <div
+                      key={product.id}
+                      className="flex gap-4 p-4 bg-secondary/50 hover:bg-secondary/70 rounded-lg"
+                    >
+                      <div className="w-20 h-20 bg-background rounded-lg flex items-center justify-center">
+                        {product.image ? (
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="w-full h-full object-cover rounded-lg"
+                          />
+                        ) : (
+                          <span className="text-text/65 text-xs">No image</span>
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold">{product.name}</h3>
+                        <p className="text-sm text-text/65">{product.price}</p>
+                        <p className="text-sm font-medium">
+                          Qty: {product.amount}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => removeFromCart(product.id, product.size)}
+                        className="p-2 hover:bg-destructive/10 text-text/65 hover:text-destructive rounded-lg transition-colors"
+                        title="Remove from cart"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Cart Footer */}
             <div className="p-6 border-t border-border">
               <div className="flex justify-between mb-4">
                 <span className="font-medium">Subtotal</span>
-                <span className="font-bold">Rs. 0</span>
+                <span className="font-bold">
+                  Rs. {getSubtotal().toLocaleString()}
+                </span>
               </div>
-              <button className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors">
+              <button
+                className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
+                onClick={() => {
+                  router.push("/checkout");
+                  setCartOpen(false);
+                }}
+              >
                 Checkout
               </button>
             </div>

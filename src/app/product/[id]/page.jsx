@@ -1,68 +1,99 @@
 "use client";
-import { useParams, notFound } from "next/navigation";
+
+import { useParams, notFound, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { products } from "@/utils/products";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import CtaButton from "@/components/CtaButton";
-function page() {
-  const [product, setProduct] = useState({
-    id: 1,
-    name: "Default Name",
-    tagline: "Default Tagline",
-    price: "PKR 0,00",
-    image: "/products/MandelicAcid.png",
-    description: "Deafult Description",
-    benefits: ["Benefit 1", "Benefit 2", "Benefit 3"],
-    ingredients: [
-      {
-        name: "Ingredients 1",
-        description: "Ingredients 1 Description",
-      },
-      {
-        name: "Ingredients 2",
-        description: "Ingredients 2 Description",
-      },
-    ],
-    howToUse: [
-      "Step 1",
-      "Step 2",
-      "Step 3",
-    ],
-    bestFor: [
-      "Best For 1",
-      "Best For 2",
-      "Best For 3",
-    ],
-    results:
-      "Default 1",
-    size: "0ml",
-    skinType: "Deafult Skin Type",
-    use: "Deafult Use",
-  });
-  const [openSection, setOpenSection] = useState("description");
-  const { id } = useParams();
-  const getProduct = () => {
-    if (id) {
-      return products.find((product) => product.id == id);
-    }
-  };
-  useEffect(() => {
-    const foundProduct = getProduct();
-    if (!foundProduct) {
-      notFound();
-    }
-    setProduct(foundProduct);
-  }, []);
+import { toast } from "react-hot-toast";
+import { supabase } from "@/lib/supabaseClient";
+import { useUser } from "@/contexts/UserContext";
+import { useCart } from "@/contexts/CartContext";
 
+function Page() {
+  const { id } = useParams();
+  const router = useRouter();
+  const { user } = useUser();
+  const { addToCart } = useCart();
+
+  // Initialize with empty/default structure matching the DB
+  const [product, setProduct] = useState({
+    name: "",
+    tagline: "",
+    price: "",
+    image: "",
+    description: "",
+    benifits: [],
+    ingredients: [],
+    howToUse: [],
+    bestFor: [],
+    results: "",
+    size: [],
+    skinType: [],
+    use: "",
+  });
+
+  const [loading, setLoading] = useState(true);
+  const [openSection, setOpenSection] = useState("description");
+  const [quantity, setQuantity] = useState(1);
+  const [selectedSize, setSelectedSize] = useState("");
+
+  // Fetch product from Supabase
+  const fetchProduct = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      toast.error(error.message);
+      setLoading(false);
+      // If product not found, trigger 404
+      if (error.code === "PGRST116") {
+        notFound();
+      }
+      return;
+    }
+
+    if (data) {
+      setProduct(data);
+      // Set default size if there's only one size
+      if (data.size && data.size.length === 1) {
+        setSelectedSize(data.size[0]);
+      }
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (id) {
+      fetchProduct();
+    }
+  }, [id]);
+
+  // Sections configuration
   const sections = [
-    { key: "description", heading: "Product Description", data: product.description },
-    { key: "benefits", heading: "Benefits", data: product.benefits },
+    {
+      key: "description",
+      heading: "Product Description",
+      data: product.description,
+    },
+    { key: "benifits", heading: "Benefits", data: product.benifits },
     { key: "ingredients", heading: "Ingredients", data: product.ingredients },
     { key: "howToUse", heading: "How to Use", data: product.howToUse },
     { key: "bestFor", heading: "Best For", data: product.bestFor },
     { key: "results", heading: "Results", data: product.results },
-    { key: "details", heading: "Details", data: { size: product.size, skinType: product.skinType, use: product.use } },
+    {
+      key: "details",
+      heading: "Details",
+      data: {
+        size: product.size,
+        skinType: product.skinType,
+        use: product.use,
+      },
+    },
   ];
 
   const toggleSection = (key) => {
@@ -74,7 +105,8 @@ function page() {
       case "description":
       case "results":
         return <p className="text-text/70">{data}</p>;
-      case "benefits":
+
+      case "benifits":
       case "howToUse":
       case "bestFor":
         return (
@@ -84,6 +116,7 @@ function page() {
             ))}
           </ul>
         );
+
       case "ingredients":
         return (
           <div className="text-text/70 space-y-3">
@@ -95,49 +128,80 @@ function page() {
             ))}
           </div>
         );
+
       case "details":
         return (
           <div className="text-text/70 space-y-2">
-            <p><span className="font-semibold">Size:</span> {data.size}</p>
-            <p><span className="font-semibold">Skin Type:</span> {data.skinType}</p>
-            <p><span className="font-semibold">Use:</span> {data.use}</p>
+            <p>
+              <span className="font-semibold">Size:</span>{" "}
+              {Array.isArray(data.size) ? data.size.join(", ") : data.size}
+            </p>
+            <p>
+              <span className="font-semibold">Skin Type:</span>{" "}
+              {Array.isArray(data.skinType)
+                ? data.skinType.join(", ")
+                : data.skinType}
+            </p>
+            <p>
+              <span className="font-semibold">Use:</span> {data.use}
+            </p>
           </div>
         );
+
       default:
         return null;
     }
   };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="mt-30 flex items-center justify-center h-96">
+        <p className="text-lg text-text/70">Loading product...</p>
+      </div>
+    );
+  }
+
+  // If product is empty (e.g., no data after fetch), you could also call notFound() here.
+  // But fetchProduct already handles notFound on error.
+
   return (
     <div className="mt-30 mb-24">
       <div className="grid grid-cols-1 lg:grid-cols-2 mx-5 lg:mx-20 items-center justify-between">
-        {/* Left */}
+        {/* Left – Image */}
         <div>
           <Image
             className="rounded-2xl"
             src={product.image}
             width={500}
             height={500}
+            alt={product.name}
           />
         </div>
-        {/* Right */}
-        <div className="flex flex-col items-start my-5 gap-y-1 ">
-          {/* Title */}
-          <h1 className="text-4xl font-bold">
-            {product.name}
-          </h1>
-          {/* Tagline */}
+
+        {/* Right – Info */}
+        <div className="flex flex-col items-start my-5 gap-y-1">
+          <h1 className="text-4xl font-bold">{product.name}</h1>
           <p className="text-sm text-text/50">{product.tagline}</p>
-          {/* Prize */}
-          <p className="text-lg font-semibold">{"PKR"+" "+product.price}</p>
-          {/* size */}
+          <p className="text-lg font-semibold">PKR {product.price}</p>
+
+          {/* Display first size if array, or all */}
           <div className="flex flex-row items-start gap-x-2">
-          <h4 className="font-bold text-base">Size: </h4>
-          <p className="text-base font-semibold text-text/80">{ product.size}</p>
+            <h4 className="font-bold text-base">Size: </h4>
+            <p className="text-base font-semibold text-text/80">
+              {Array.isArray(product.size)
+                ? product.size.join(", ")
+                : product.size}
+            </p>
           </div>
-          {/* Sections */}
+
+          {/* Accordion Sections */}
           <div className="mt-6 space-y-2 w-[90vw]">
             {sections.map((section) => (
-              <div key={section.key} className="border-b border-border">
+              <div
+                key={section.key}
+                className="border-b border-border lg:w-125 w-[90vw]"
+              >
                 <button
                   onClick={() => toggleSection(section.key)}
                   className="lg:w-125 w-[90vw] text-left py-3 flex justify-between items-center hover:text-primary transition-colors"
@@ -167,12 +231,74 @@ function page() {
               </div>
             ))}
           </div>
-          {/* Add To Cart */}
-          <div className="mt-5">
+          {/* Size Select */}
+          {product.size && product.size.length > 1 && (
+            <div className="mt-4">
+              <h4 className="font-bold text-base mb-2">Select Size:</h4>
+              <div className="flex flex-wrap gap-2">
+                {product.size.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    className={`px-4 py-2 border rounded-lg transition-colors ${
+                      selectedSize === size
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-secondary-foreground hover:border-primary"
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
-          <CtaButton>
-            Add To Cart
-          </CtaButton>
+          {/* Add To Cart */}
+          <div className="mt-5 flex flex-row gap-x-5 items-center">
+            <div className="flex items-center gap-4 ">
+              <span className="font-semibold">Quantity:</span>
+              <div className="flex items-center border border-secondary-foreground rounded-2xl">
+                <button
+                  type="button"
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="px-4 py-2 hover:bg-secondary transition-colors rounded-l-2xl"
+                >
+                  -
+                </button>
+                <span className="px-4 py-2 min-w-[50px] text-center">
+                  {quantity}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="px-4 py-2 hover:bg-secondary transition-colors rounded-r-2xl"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+            <CtaButton
+              clickFunction={async () => {
+                // Validate size selection if product has multiple sizes
+                if (product.size && product.size.length > 1 && !selectedSize) {
+                  toast.error("Please select a size");
+                  return;
+                }
+                try {
+                  await addToCart(product.id, user, quantity, selectedSize);
+                  router.push("/");
+                } catch (error) {
+                  if (error.message === "User not found") {
+                    toast.error("Please sign in to add to cart");
+                    router.push("/signup");
+                  } else {
+                    toast.error(error.message);
+                  }
+                }
+              }}
+            >
+              Add To Cart
+            </CtaButton>
           </div>
         </div>
       </div>
@@ -180,4 +306,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

@@ -2,6 +2,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import LayoutWrapper from "@/components/LayoutWrapper";
 import AosProvider from "@/providers/AosProvider";
+import { UserProvider } from "@/contexts/UserContext";
+import { CartProvider } from "@/contexts/CartContext";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,7 +29,14 @@ export default function RootLayout({ children }) {
     >
       <body className="min-h-full flex flex-col w-screen overflow-x-hidden">
         <AosProvider />
-        <LayoutWrapper>{children}</LayoutWrapper>
+        <UserProvider>
+          <CartProvider>
+            <LayoutWrapper>
+              {children}
+              <Toaster />
+            </LayoutWrapper>
+          </CartProvider>
+        </UserProvider>
       </body>
     </html>
   );
