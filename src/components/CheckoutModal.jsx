@@ -5,9 +5,8 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link';
 import { Badge } from './ui/badge';
 import { supabase } from '@/lib/supabaseClient';
-import { useUser } from '@/contexts/UserContext';
-import { useCart } from '@/contexts/CartContext';
-import toast from 'react-hot-toast';
+import { useUser } from "@/contexts/UserContext";
+import toast from "react-hot-toast";
 
 function CheckoutModal({
   open,
@@ -18,10 +17,19 @@ function CheckoutModal({
   total,
   coupon,
   cart,
-  address
+  address,
 }) {
-  const { user } = useUser()
-  const { clearCart } = useCart()
+  const { user } = useUser();
+  const clearCart = async () => {
+    const { error: clearError } = await supabase
+      .from("cart")
+      .update({ products: [] })
+      .eq("userId", user?.id);
+
+    if (clearError) {
+      console.error("Error clearing cart:", clearError);
+    }
+  };
 
   const updateCouponUsage = async () => {
     if (!coupon || !user) return;
@@ -42,7 +50,7 @@ function CheckoutModal({
           .eq("couponId", coupon.couponId);
       }
     }
-  }
+  };
 
   const handleCheckout = async () => {
     // console.log(cart);
@@ -59,16 +67,15 @@ function CheckoutModal({
     if (orderError) {
       console.log(orderError);
 
-      toast.error(orderError.message)
-    }
-    else{
+      toast.error(orderError.message);
+    } else {
       // Clear cart after successful order
       await clearCart();
       // Update coupon usage if coupon was used
       await updateCouponUsage();
       setCheckout(true);
     }
-  }
+  };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {!checkout ? (

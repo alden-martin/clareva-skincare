@@ -13,16 +13,14 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
 import { useUser } from "@/contexts/UserContext";
-import { useCart } from "@/contexts/CartContext";
 import toast from "react-hot-toast";
+import { supabase } from "@/lib/supabaseClient";
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-  const { user } = useUser();
-  const { cartItems, cartProducts, removeFromCart, getCartCount, getSubtotal } =
-    useCart();
+  const { user, cartItems, cartProducts, refreshCart } = useUser();
   const router = useRouter();
   // Configuration for navbar styles per page
   const navbarStyles = {
@@ -87,7 +85,53 @@ function Navbar() {
     scrollIcon: "text-text/65 hover:text-text",
   };
   const getTotalCartCount = () => {
-    return getCartCount();
+    return cartItems.length;
+    // return cartItems.reduce((total, item) => total + (item.amount || 0), 0);
+  };
+
+  const getSubtotal = () => {
+    return cartProducts.reduce((total, product) => {
+      const priceString = product.price || "0";
+      // Extract numeric value from price string (e.g., "PKR 1000" -> 1000)
+      const priceMatch = priceString.match(/[\d,]+\.?\d*/);
+      const price = priceMatch
+        ? parseFloat(priceMatch[0].replace(/,/g, ""))
+        : 0;
+      return total + price * (product.amount || 0);
+    }, 0);
+  };
+
+  const deleteCartItem = async (productId, size = null) => {
+    if (!user) {
+      toast.error("Please login to delete items");
+      return;
+    }
+
+    try {
+      // Filter out the item to be deleted (considering both id and size)
+      const updatedCartItems = cartItems.filter(
+        (item) => !(item.id === productId && item.size === size),
+      );
+
+      // Update the cart in the database
+      const { error } = await supabase
+        .from("cart")
+        .update({ products: updatedCartItems })
+        .eq("userId", user.id);
+
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      // Refresh cart from context
+      refreshCart();
+
+      toast.success("Item removed from cart");
+    } catch (error) {
+      console.error("Error deleting cart item:", error);
+      toast.error("Error removing item from cart");
+    }
   };
 
   useEffect(() => {
@@ -169,10 +213,11 @@ function Navbar() {
         </Link>
         <button
           onClick={() => {
-            if (!user) {
-              router.push("/login");
-            }
+            // if (!user) {
+            //   router.push("/login");
+            // }
             setCartOpen(true);
+            console.log(cartProducts);
           }}
           className="relative cursor-pointer"
         >
@@ -209,14 +254,7 @@ function Navbar() {
             <div className="flex items-center justify-between p-6 border-b border-border">
               <h1 className="text-2xl font-heading font-bold">Cart</h1>
               <button
-                onClick={() => {
-                  if (!user) {
-                    // TODO: Show login modal or redirect to login
-                    console.log("Please login to view cart");
-                    router.push("/signin");
-                  }
-                  setCartOpen(false);
-                }}
+                onClick={() => setCartOpen(false)}
                 className="p-2 hover:bg-secondary rounded-lg transition-colors"
               >
                 <X size={24} />
@@ -231,9 +269,9 @@ function Navbar() {
                 </p>
               ) : (
                 <div className="flex flex-col gap-4">
-                  {cartProducts.map((product) => (
+                  {cartProducts.map((product, index) => (
                     <div
-                      key={product.id}
+                      key={`${product.id}-${product.size || "default"}-${index}`}
                       className="flex gap-4 p-4 bg-secondary/50 hover:bg-secondary/70 rounded-lg"
                     >
                       <div className="w-20 h-20 bg-background rounded-lg flex items-center justify-center">
@@ -248,14 +286,23 @@ function Navbar() {
                         )}
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-semibold">{product.name}</h3>
-                        <p className="text-sm text-text/65">{product.price}</p>
-                        <p className="text-sm font-medium">
-                          Qty: {product.amount}
+                        <h3 className="font-semibold">
+                          {product.name || "Product"}
+                        </h3>
+                        <p className="text-sm text-text/65">
+                          {product.price || "Price not available"}
                         </p>
+                        <p className="text-sm font-medium">
+                          Qty: {product.amount || 0}
+                        </p>
+                        {product.size && typeof product.size === "string" && (
+                          <p className="text-xs text-text/50 mt-1">
+                            Size: {product.size}
+                          </p>
+                        )}
                       </div>
                       <button
-                        onClick={() => removeFromCart(product.id, product.size)}
+                        onClick={() => deleteCartItem(product.id, product.size)}
                         className="p-2 hover:bg-destructive/10 text-text/65 hover:text-destructive rounded-lg transition-colors"
                         title="Remove from cart"
                       >
