@@ -40,7 +40,7 @@ function TypeCard(skinType) {
         animate={{ opacity: isHovered ? 1 : 0, x: isHovered ? 0 : 20 }}
         transition={{ duration: 0.3 }}
       >
-        <Link href={skinType.link} className={`absolute top-6 right-6 bg-white p-2 rounded-full ${!isHovered ? "hidden" : "block"}`}>
+        <Link href={"/shop"} className={`absolute top-6 right-6 bg-white p-2 rounded-full ${!isHovered ? "hidden" : "block"}`}>
           <MoveUpRight className=' text-secondary-foreground' />
         </Link>
       </motion.span>
