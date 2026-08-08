@@ -173,7 +173,7 @@ function ProductList() {
 
   return (
     <>
-      <div className="absolute left-0 right-20 -top-24 flex justify-end gap-4 mb-6">
+      <div className="absolute left-0 right-20 -top-24 hidden lg:flex justify-end gap-4 mb-6">
         <button
           ref={prevBtn}
           className="custom-prev border border-black p-2 rounded-full hover:bg-black hover:text-white transition-all delay-75"
@@ -217,6 +217,7 @@ function ProductList() {
             <ProductCard
               name={product.name}
               price={product.price}
+              size={product.size?.[0]}
               pros={product.tagline}
               id={product.id}
               image={product.image}
@@ -224,6 +225,20 @@ function ProductList() {
           </SwiperSlide>
         ))}
       </Swiper>
+      <div className="absolute left-0 right-20 -top-24 lg:hidden flex justify-end gap-4 mb-6">
+        <button
+          ref={prevBtn}
+          className="custom-prev border border-black p-2 rounded-full hover:bg-black hover:text-white transition-all delay-75"
+        >
+          <ArrowLeft />
+        </button>
+        <button
+          ref={nextBtn}
+          className="custom-next border border-black p-2 rounded-full hover:bg-black hover:text-white transition-all delay-75"
+        >
+          <ArrowRight />
+        </button>
+      </div>
     </>
   );
 }

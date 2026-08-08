@@ -13,15 +13,23 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
 import { useUser } from "@/contexts/UserContext";
+import { useCart } from "@/contexts/CartContext";
 import toast from "react-hot-toast";
-import { supabase } from "@/lib/supabaseClient";
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-  const { user, cartItems, cartProducts, refreshCart } = useUser();
+  const { user } = useUser();
+  const { cartItems, cartProducts, refreshCart } = useCart();
   const router = useRouter();
+
+  // Refresh cart when cart is opened
+  useEffect(() => {
+    if (cartOpen) {
+      refreshCart();
+    }
+  }, [cartOpen]);
   // Configuration for navbar styles per page
   const navbarStyles = {
     "/": {
@@ -102,27 +110,14 @@ function Navbar() {
   };
 
   const deleteCartItem = async (productId, size = null) => {
-    if (!user) {
-      toast.error("Please login to delete items");
-      return;
-    }
-
     try {
       // Filter out the item to be deleted (considering both id and size)
       const updatedCartItems = cartItems.filter(
         (item) => !(item.id === productId && item.size === size),
       );
 
-      // Update the cart in the database
-      const { error } = await supabase
-        .from("cart")
-        .update({ products: updatedCartItems })
-        .eq("userId", user.id);
-
-      if (error) {
-        toast.error(error.message);
-        return;
-      }
+      // Update the cart in localStorage
+      localStorage.setItem("clarevaCart", JSON.stringify(updatedCartItems));
 
       // Refresh cart from context
       refreshCart();
@@ -174,8 +169,8 @@ function Navbar() {
   ];
 
   return (
-    <div
-      className={`flex justify-between items-center p-6 fixed w-full z-50 ${
+    <nav
+      className={`flex justify-between items-center p-6 fixed w-full z-50 max-w-screen ${
         scrolled ? currentStyle.scrolled : currentStyle.default
       }`}
     >
@@ -183,7 +178,7 @@ function Navbar() {
       <div className="flex gap-x-14 items-center">
         <Link href={"/"}>
           <h1 className="serif text-4xl tracking-tight text-foreground font-bold">
-            Clareva
+            Claréva
           </h1>
         </Link>
         {/* Desktop Navigation */}
@@ -205,12 +200,12 @@ function Navbar() {
 
       {/* Actions */}
       <div className="flex gap-x-10 mr-5 items-center">
-        <Link href={user ? "/user" : "/signup"}>
+        {/* <Link href={user ? "/user" : "/signup"}>
           <User
             className={`${scrolled ? currentStyle.scrollIcon : currentStyle.iconStyle} transition-colors`}
             size={20}
           />
-        </Link>
+        </Link> */}
         <button
           onClick={() => {
             // if (!user) {
@@ -375,7 +370,7 @@ function Navbar() {
           </div>
         </motion.div>
       )}
-    </div>
+    </nav>
   );
 }
 

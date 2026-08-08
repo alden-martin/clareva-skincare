@@ -4,8 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Button } from '@/components/ui/button'
 import Link from 'next/link';
 import { Badge } from './ui/badge';
-import { supabase } from '@/lib/supabaseClient';
-import { useUser } from "@/contexts/UserContext";
+import { supabase } from "@/lib/supabaseClient";
 import toast from "react-hot-toast";
 
 function CheckoutModal({
@@ -18,37 +17,38 @@ function CheckoutModal({
   coupon,
   cart,
   address,
+  customerDetails,
 }) {
-  const { user } = useUser();
   const clearCart = async () => {
-    const { error: clearError } = await supabase
-      .from("cart")
-      .update({ products: [] })
-      .eq("userId", user?.id);
-
-    if (clearError) {
-      console.error("Error clearing cart:", clearError);
+    try {
+      localStorage.setItem("clarevaCart", JSON.stringify([]));
+    } catch (error) {
+      console.error("Error clearing cart:", error);
     }
   };
 
   const updateCouponUsage = async () => {
-    if (!coupon || !user) return;
+    if (!coupon || !customerDetails?.email) return;
 
-    const { data: couponData } = await supabase
-      .from("coupons")
-      .select("usedBy")
-      .eq("couponId", coupon.couponId)
-      .single();
+    try {
+      const { data: couponData } = await supabase
+        .from("coupons")
+        .select("usedBy")
+        .eq("couponId", coupon.couponId)
+        .single();
 
-    if (couponData) {
-      const updatedUsedBy = couponData.usedBy || [];
-      if (!updatedUsedBy.includes(user.id)) {
-        updatedUsedBy.push(user.id);
-        await supabase
-          .from("coupons")
-          .update({ usedBy: updatedUsedBy })
-          .eq("couponId", coupon.couponId);
+      if (couponData) {
+        const updatedUsedBy = couponData.usedBy || [];
+        if (!updatedUsedBy.includes(customerDetails.email)) {
+          updatedUsedBy.push(customerDetails.email);
+          await supabase
+            .from("coupons")
+            .update({ usedBy: updatedUsedBy })
+            .eq("couponId", coupon.couponId);
+        }
       }
+    } catch (error) {
+      console.error("Error updating coupon usage:", error);
     }
   };
 
@@ -56,13 +56,15 @@ function CheckoutModal({
     // console.log(cart);
     // console.log(coupon);
     const { error: orderError } = await supabase.from("orders").insert({
-      userId: user?.id,
       products: cart,
       status: "pending",
       delivery_address: address,
       coupon: coupon ? coupon.couponId : null,
-      total: total,
+      total: total?.toString(),
       method: method?.name,
+      name: customerDetails?.name || null,
+      number: customerDetails?.phone || null,
+      email: customerDetails?.email || null,
     });
     if (orderError) {
       console.log(orderError);

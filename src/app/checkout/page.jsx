@@ -13,9 +13,7 @@ import { useRouter } from "next/navigation";
 
 function page() {
   const router = useRouter();
-  const { user } = useUser();
   const [open, setOpen] = useState(false);
-  const [userDetail, setUserDetail] = useState(null);
   const [coupon, setCoupon] = useState(null);
   const [userCoupon, setUserCoupon] = useState("");
   const [cartItems, setCartItems] = useState([]);
@@ -26,49 +24,22 @@ function page() {
   const [address, setAddress] = useState("");
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
   const [selectedMethodDetails, setSelectedMethodDetails] = useState(null);
-  const fetchData = async () => {
-    const { data, error: userError } = await supabase
-      .from("user")
-      .select("*")
-      .eq("id", user?.id);
-
-    if (userError) {
-      toast.error(userError.message);
-      setLoading(false);
-    } else if (data && data.length > 0) {
-      setUserDetail(data[0]);
-      setLoading(false);
-    }
-  };
+  const [customerDetails, setCustomerDetails] = useState({
+    name: "",
+    phone: "",
+    email: "",
+  });
   const getCart = async () => {
-    if (!user) {
-      setCartItems([]);
-      setCartProducts([]);
-      setLoading(false);
-      return;
-    }
-    const { data, error: cartError } = await supabase
-      .from("cart")
-      .select("products")
-      .eq("userId", user.id)
-      .single();
-    if (cartError) {
-      if (cartError.code !== "PGRST116") {
-        toast.error(cartError.message);
-      }
-      setCartItems([]);
-      setCartProducts([]);
-      setLoading(false);
-      return;
-    }
-    if (data && data.products) {
-      setCartItems(data.products);
+    try {
+      // Get cart from localStorage
+      const cartData = JSON.parse(localStorage.getItem("clarevaCart") || "[]");
+      setCartItems(cartData);
 
       // Fetch product details for each cart item
-      const productPromises = data.products.map(async (item) => {
+      const productPromises = cartData.map(async (item) => {
         try {
           const product = await getProduct(item.id);
-          return { ...product, amount: item.amount };
+          return { ...product, amount: item.amount, size: item.size };
         } catch (error) {
           console.error("Error fetching product:", error);
           return null;
@@ -77,7 +48,8 @@ function page() {
 
       const products = await Promise.all(productPromises);
       setCartProducts(products.filter((p) => p !== null));
-    } else {
+    } catch (error) {
+      console.error("Cart fetch error:", error);
       setCartItems([]);
       setCartProducts([]);
     }
@@ -127,7 +99,7 @@ function page() {
 
   const getTotal = (productTotal, discount = 0, deliveryCharges = 200, cod) => {
     if (cod) {
-      return productTotal - discount + 150 + deliveryCharges;
+      return productTotal - discount + 100 + deliveryCharges;
     } else {
       return productTotal - discount + deliveryCharges;
     }
@@ -143,8 +115,8 @@ function page() {
       return false;
     }
 
-    if (!user) {
-      toast.error("Please sign in to use a coupon");
+    if (!customerDetails.email) {
+      toast.error("Please enter your email to use a coupon");
       return false;
     }
 
@@ -172,8 +144,8 @@ function page() {
         return false;
       }
 
-      // Check if user has already used this coupon
-      if (data.usedBy && data.usedBy.includes(user.id)) {
+      // Check if email has already used this coupon
+      if (data.usedBy && data.usedBy.includes(customerDetails.email)) {
         toast.error("You have already used this coupon");
         return false;
       }
@@ -190,9 +162,8 @@ function page() {
   };
 
   useEffect(() => {
-    fetchData();
     getCart();
-  }, [user]);
+  }, []);
   if (loading) {
     return <Loading />;
   }
@@ -264,98 +235,69 @@ function page() {
             </span>
           </div>
         </div>
+        {/* Customer Details */}
+        <div className="my-6 w-full">
+          <h2 className="text-lg font-semibold mb-3">Customer Details</h2>
+          <div className="flex flex-col gap-3">
+            <input
+              type="text"
+              name="name"
+              placeholder="Full Name"
+              value={customerDetails.name}
+              onChange={(e) =>
+                setCustomerDetails({ ...customerDetails, name: e.target.value })
+              }
+              className="border border-secondary-foreground p-3 rounded-lg bg-background"
+            />
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Phone Number"
+              value={customerDetails.phone}
+              onChange={(e) =>
+                setCustomerDetails({
+                  ...customerDetails,
+                  phone: e.target.value,
+                })
+              }
+              className="border border-secondary-foreground p-3 rounded-lg bg-background"
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={customerDetails.email}
+              onChange={(e) =>
+                setCustomerDetails({
+                  ...customerDetails,
+                  email: e.target.value,
+                })
+              }
+              className="border border-secondary-foreground p-3 rounded-lg bg-background"
+            />
+          </div>
+        </div>
+
         {/* Delivery Address */}
         <div className="my-6 w-full">
           <h2 className="text-lg font-semibold mb-3">Delivery Address</h2>
-          {userDetail?.address ? (
-            <div className="flex flex-row gap-3">
-              <div className="relative">
-                <input
-                  type="text"
-                  value={changeAddress ? address : userDetail.address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  disabled={!changeAddress}
-                  className="border border-secondary-foreground p-3 rounded-lg bg-background disabled:opacity-70 disabled:cursor-not-allowed disabled:text-text/70 min-w-xl"
-                />
-              </div>
-              <div className="flex gap-2">
-                {changeAddress ? (
-                  <>
-                    <CtaButton
-                      clickFunction={getCurrentLocation}
-                      changeStyle="bg-secondary text-text hover:bg-secondary/80 px-4 py-2 rounded-lg text-sm font-medium flex flex-row items-center gap-2"
-                    >
-                      Use Current Location
-                      <MapPin className="text-text/65" />
-                    </CtaButton>
-                    <CtaButton
-                      clickFunction={async () => {
-                        const { error } = await supabase
-                          .from("user")
-                          .update({ Address: address })
-                          .eq("id", user.id);
-                        if (error) {
-                          toast.error(error.message);
-                        } else {
-                          toast.success("Address updated successfully!");
-                          setChangeAddress(false);
-                          fetchData();
-                        }
-                      }}
-                      changeStyle="bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium"
-                    >
-                      Save
-                    </CtaButton>
-                  </>
-                ) : (
-                  <CtaButton
-                    clickFunction={() => {
-                      setAddress(userDetail.address);
-                      setChangeAddress(true);
-                    }}
-                    changeStyle="text-primary hover:underline text-sm font-medium"
-                  >
-                    Change
-                  </CtaButton>
-                )}
-              </div>
+          <div className="flex flex-col gap-3">
+            <input
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="Enter your address"
+              className="border border-secondary-foreground p-3 rounded-lg bg-background"
+            />
+            <div className="flex gap-2">
+              <CtaButton
+                clickFunction={getCurrentLocation}
+                changeStyle="bg-secondary text-text hover:bg-secondary/80 px-4 py-2 rounded-lg text-sm font-medium"
+              >
+                Use Current Location
+              </CtaButton>
             </div>
-          ) : (
-            <div className="flex flex-col gap-3">
-              <input
-                type="text"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                placeholder="Enter your address"
-                className="border border-secondary-foreground p-3 rounded-lg bg-background"
-              />
-              <div className="flex gap-2">
-                <CtaButton
-                  clickFunction={getCurrentLocation}
-                  changeStyle="bg-secondary text-text hover:bg-secondary/80 px-4 py-2 rounded-lg text-sm font-medium"
-                >
-                  Use Current Location
-                </CtaButton>
-                <CtaButton
-                  clickFunction={async () => {
-                    const { error } = await supabase
-                      .from("user")
-                      .update({ Address: address })
-                      .eq("id", user.id);
-                    if (error) {
-                      toast.error(error.message);
-                    } else {
-                      toast.success("Address saved successfully!");
-                      fetchData();
-                    }
-                  }}
-                  changeStyle="bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium"
-                >
-                  Save
-                </CtaButton>
-              </div>
-            </div>
-          )}
+          </div>
         </div>
         {/* Payment Method */}
         <div className="my-6 w-full">
@@ -381,7 +323,7 @@ function page() {
               {
                 id: "cod",
                 name: "Cash on Delivery",
-                details: "Pay when your order arrives \nExtra Charges Rs.150",
+                details: "Pay when your order arrives \nExtra Charges Rs.100",
               },
             ].map((method) => (
               <div
@@ -459,9 +401,10 @@ function page() {
         method={selectedMethodDetails}
         setCheckout={setCheckoutConfirm}
         checkout={checkoutConfirm}
-        address={userDetail?.address || address}
+        address={address}
         coupon={coupon}
         cart={cartItems}
+        customerDetails={customerDetails}
         total={getTotal(
           cartProducts.reduce((total, product) => {
             const priceString = product.price || "0";

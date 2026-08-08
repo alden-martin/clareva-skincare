@@ -11,25 +11,29 @@ export default function Story() {
     {
       icon: FlaskConical,
       title: "Science-Driven",
-      description: "Proven active ingredients supported by modern skincare research and dermatological insight.",
+      description:
+        "Proven active ingredients supported by modern skincare research and dermatological insight.",
       delay: 0,
     },
     {
       icon: Sparkles,
       title: "Simple & Effective",
-      description: "Minimal routines, maximum results — considered formulas that respect your skin's balance.",
+      description:
+        "Minimal routines, maximum results -considered formulas that respect your skin's balance.",
       delay: 120,
     },
     {
       icon: Sun,
       title: "Made for Everyday Life",
-      description: "Designed for Pakistan's climate and the daily environmental challenges skin faces.",
+      description:
+        "Designed for Pakistan's climate and the daily environmental challenges skin faces.",
       delay: 240,
     },
     {
       icon: HeartHandshake,
       title: "Confidence Through Care",
-      description: "Healthy skin is about confidence, comfort, and the quiet consistency of a daily ritual.",
+      description:
+        "Healthy skin is about confidence, comfort, and the quiet consistency of a daily ritual.",
       delay: 360,
     },
   ];
@@ -55,132 +59,132 @@ export default function Story() {
       text: "Visible Results",
       delay: 520,
     },
-    ];
-    
-     const ingredients = [
-      {
-        id: 1,
-        name: "Vitamin C",
-        benefit: "Brightening & antioxidant defense",
-        description: "Evens tone, revives dullness",
-        slug: "vitamin-c",
-      },
-      {
-        id: 2,
-        name: "Niacinamide",
-        benefit: "Balances & refines texture",
-        description: "Minimizes pores, calms redness",
-        slug: "niacinamide",
-      },
-      {
-        id: 3,
-        name: "Glutathione",
-        benefit: "Radiance & clarity",
-        description: "Master antioxidant for luminous skin",
-        slug: "glutathione",
-      },
-      {
-        id: 4,
-        name: "Mandelic Acid",
-        benefit: "Gentle resurfacing",
-        description: "Ideal for sensitive skin",
-        slug: "mandelic-acid",
-      },
-      {
-        id: 5,
-        name: "Retinol",
-        benefit: "Renewal & firmness",
-        description: "Smoothes fine lines over time",
-        slug: "retinol",
-      },
-      {
-        id: 6,
-        name: "Salicylic Acid",
-        benefit: "Clarifies & unclogs",
-        description: "Targeted for blemish-prone skin",
-        slug: "salicylic-acid",
-      },
-      {
-        id: 7,
-        name: "Glycolic Acid",
-        benefit: "Renews & polishes",
-        description: "Reveals fresh, radiant skin",
-        slug: "glycolic-acid",
-      },
-      {
-        id: 8,
-        name: "Hyaluronic Acid",
-        benefit: "Deep hydration",
-        description: "Plumps, softens, restores bounce",
-        slug: "hyaluronic-acid",
-      },
-    ];
+  ];
 
-    const journey = [
-      {
-        opposite: "Clarify",
-        word: "Acne",
-      },
-      {
-        opposite: "Brighten",
-        word: "Pigmentation",
-      },
-      {
-        opposite: "Hydrate",
-        word: "Dryness",
-      },
-      {
-        opposite: "Illuminate",
-        word: "Dullness",
-      },
-      {
-        opposite: "Protect",
-        word: "Healthy Maintenance",
-      },
-    ];
-    const whyChooseClareva = [
-      {
-        id: 1,
-        number: "01",
-        title: "Premium Ingredients",
-        description:
-          "Sourced and selected for purity, potency and skin-first performance.",
-        icon: Leaf,
-      },
-      {
-        id: 2,
-        number: "02",
-        title: "Visible Results",
-        description:
-          "Formulas built around clinical actives that deliver on their promise.",
-        icon: Sparkles,
-      },
-      {
-        id: 3,
-        number: "03",
-        title: "Trusted Formulations",
-        description:
-          "Dermatology-inspired, safety-tested, made with quiet confidence.",
-        icon: ShieldCheck,
-      },
-      {
-        id: 4,
-        number: "04",
-        title: "Skincare Made Simple",
-        description:
-          "Considered routines that fit real lives — no noise, only what works.",
-        icon: WandSparkles,
-      },
-    ];
+  const ingredients = [
+    {
+      id: 1,
+      name: "Vitamin C",
+      benefit: "Brightening & antioxidant defense",
+      description: "Evens tone, revives dullness",
+      slug: "vitamin-c",
+    },
+    {
+      id: 2,
+      name: "Niacinamide",
+      benefit: "Balances & refines texture",
+      description: "Minimizes pores, calms redness",
+      slug: "niacinamide",
+    },
+    {
+      id: 3,
+      name: "Glutathione",
+      benefit: "Radiance & clarity",
+      description: "Master antioxidant for luminous skin",
+      slug: "glutathione",
+    },
+    {
+      id: 4,
+      name: "Mandelic Acid",
+      benefit: "Gentle resurfacing",
+      description: "Ideal for sensitive skin",
+      slug: "mandelic-acid",
+    },
+    {
+      id: 5,
+      name: "Retinol",
+      benefit: "Renewal & firmness",
+      description: "Smoothes fine lines over time",
+      slug: "retinol",
+    },
+    {
+      id: 6,
+      name: "Salicylic Acid",
+      benefit: "Clarifies & unclogs",
+      description: "Targeted for blemish-prone skin",
+      slug: "salicylic-acid",
+    },
+    {
+      id: 7,
+      name: "Glycolic Acid",
+      benefit: "Renews & polishes",
+      description: "Reveals fresh, radiant skin",
+      slug: "glycolic-acid",
+    },
+    {
+      id: 8,
+      name: "Hyaluronic Acid",
+      benefit: "Deep hydration",
+      description: "Plumps, softens, restores bounce",
+      slug: "hyaluronic-acid",
+    },
+  ];
+
+  const journey = [
+    {
+      opposite: "Clarify",
+      word: "Acne",
+    },
+    {
+      opposite: "Brighten",
+      word: "Pigmentation",
+    },
+    {
+      opposite: "Hydrate",
+      word: "Dryness",
+    },
+    {
+      opposite: "Illuminate",
+      word: "Dullness",
+    },
+    {
+      opposite: "Protect",
+      word: "Healthy Maintenance",
+    },
+  ];
+  const whyChooseClareva = [
+    {
+      id: 1,
+      number: "01",
+      title: "Premium Ingredients",
+      description:
+        "Sourced and selected for purity, potency and skin-first performance.",
+      icon: Leaf,
+    },
+    {
+      id: 2,
+      number: "02",
+      title: "Visible Results",
+      description:
+        "Formulas built around clinical actives that deliver on their promise.",
+      icon: Sparkles,
+    },
+    {
+      id: 3,
+      number: "03",
+      title: "Trusted Formulations",
+      description:
+        "Dermatology-inspired, safety-tested, made with quiet confidence.",
+      icon: ShieldCheck,
+    },
+    {
+      id: 4,
+      number: "04",
+      title: "Skincare Made Simple",
+      description:
+        "Considered routines that fit real lives -no noise, only what works.",
+      icon: WandSparkles,
+    },
+  ];
   return (
-    <div>
+    <div className="max-w-screen overflow-hidden">
       {/* Hero Section */}
       <section className="relative min-h-screen overflow-hidden">
         {/* Background Image */}
-        <div className="absolute inset-0 bg-[url('/hero/hero-story.png')] bg-cover bg-position-[right_15%]" />
+        <div className="absolute inset-0 bg-[url('/hero/hero-story.png')] bg-cover lg:bg-position-[right_15%] bg-position-[50%]" />
 
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-linear-to-r from-hero-background via-hero-background/90 via-30% to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-r from-hero-background lg:via-hero-background/90  lg:via-30% via-hero-background/70 via-70% to-transparent" />
 
         {/* Content */}
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 items-center min-h-screen">
@@ -225,11 +229,11 @@ export default function Story() {
           <p className="text-text/60 text-lg">
             Clareva was born from a simple observation: skincare in Pakistan
             deserved the same thoughtfulness, science and elegance found in the
-            world's most trusted beauty houses — reimagined for the skin,
-            climate and rhythm of life here.
+            world's most trusted beauty houses -reimagined for the skin, climate
+            and rhythm of life here.
           </p>
           <p className="text-text/60 text-lg">
-            We spent years listening — to dermatologists, chemists, and everyday
+            We spent years listening -to dermatologists, chemists, and everyday
             people navigating dryness, dullness and the daily weight of
             pollution. What emerged is a considered collection built on
             evidence, restraint and respect for the skin's natural intelligence.
@@ -302,7 +306,7 @@ export default function Story() {
         </div>
       </section>
       {/* Promise */}
-      <section className="bg-card py-28 md:py-40 relative overflow-hidden px-20">
+      <section className="bg-card lg:py-28 md:py-40 relative overflow-hidden lg:px-20 px-20 py-10 flex flex-col items-center">
         <div className="absolute top-40 left-[5%] h-64 w-64 rounded-full bg-nude/60 blur-3xl animate-float"></div>
         <div className="container-luxe grid gap-16 lg:grid-cols-[1fr_1.2fr] items-center">
           <div data-aos="fade-right" className="relative">
@@ -343,18 +347,18 @@ export default function Story() {
         </div>
       </section>
       {/* Ingredients  */}
-      <section className="bg-secondary flex flex-col py-20 px-10 ">
-        <div className="flex flex-col gap-y-5 w-[55%]">
+      <section className="bg-secondary flex flex-col items-center lg:py-20 lg:px-10 p-5 ">
+        <div className="flex flex-col gap-y-5 w-full lg:w-[55%]">
           <Heading
             mainHeading={"Ingredients that make a difference."}
             subHeading={"The Formulary"}
           />
           <p className="text-text/80 text-lg">
-            Great skincare starts with great ingredients — chosen for what they
+            Great skincare starts with great ingredients -chosen for what they
             do, not what they promise.
           </p>
         </div>
-        <div className="grid grid-cols-4 grid-rows-2 gap-4 mt-5">
+        <div className="grid grid-cols-1 lg:grid-cols-4 grid-rows-2 gap-4 mt-5">
           {ingredients.map((ingredient, index) => (
             <div
               key={ingredient.id}
@@ -404,18 +408,18 @@ export default function Story() {
       </section>
       {/* Why Clareva */}
       <section className="bg-secondary flex flex-col py-20 px-10 ">
-        <div className="flex flex-row justify-between w-full items-end">
+        <div className="flex lg:flex-row flex-col lg:justify-between justify-center w-full items-end">
           <Heading
-            container="flex flex-col gap-y-4 w-1/2"
+            container="flex flex-col gap-y-4 lg:w-1/2 w-full items-center lg:items-start"
             mainHeading={"A quieter kind of confidence."}
             subHeading={"Why Clareva"}
           />
-          <p className="text-text/80 text-lg mb-5 w-1/3">
+          <p className="text-text/80 text-lg mb-5 lg:w-1/3 w-full">
             Four reasons thousands of people are making Clareva part of their
-            daily ritual — and their long-term investment in skin.
+            daily ritual -and their long-term investment in skin.
           </p>
         </div>
-        <div className="grid grid-cols-4  gap-4 mt-5">
+        <div className="grid grid-cols-1 lg:grid-cols-4  gap-4 mt-5">
           {whyChooseClareva.map((why, index) => (
             <div
               key={why.id}
@@ -441,7 +445,7 @@ export default function Story() {
           container="flex flex-col items-center gap-y-5 justify-center text-center w-1/2"
           subHeading={"Our Vision"}
           mainHeading={
-            "To become one of Pakistan's most trusted skincare brands — empowering people to feel confident in their natural beauty."
+            "To become one of Pakistan's most trusted skincare brands -empowering people to feel confident in their natural beauty."
           }
         />
         <p className="text-text/70 text-xl mt-5 w-[60%] text-center">
@@ -450,33 +454,28 @@ export default function Story() {
         </p>
       </section>
       {/* Join Us */}
-          <section className="bg-[url('/join-about.png')] flex flex-col items-start py-40 px-10 gap-y-10 relative z-20">
-          {/* Overlay */}
-              <div className="bg-secondary/50  w-full h-full absolute top-0 left-0 z-10"></div>
-              <div className="w-[70%] flex flex-col gap-y-10 relative z-20">
-                  
-        <Heading
-          mainHeading={"Join the Clareva community."}
-          subHeading={"Join Us"}
-        />
-        <p className="text-text/80 text-lg">
-          Thousands of people are embracing healthier skincare habits with
-          Clareva every day. Whether you're beginning your skincare journey or
-          refining an established routine, we're here to help you discover
-          products that bring out your skin's natural radiance.
-        </p>
-        <h4 className="text-3xl font-heading ">Because healthy skin isn't a trend — it's a lifelong investment.
-
-                  </h4>
-                  <div className="flex flex-row gap-x-5">
-                  <CtaButton>
-                      Shop Now
-                  </CtaButton>
-                  <OutlineButton>
-                      Build My Routine
-                  </OutlineButton>
-                  </div>
+      <section className="bg-[url('/join-about.png')] bg-cover flex flex-col items-start py-40 px-10 gap-y-10 relative z-20">
+        {/* Overlay */}
+        <div className="bg-secondary/50  w-full h-full absolute top-0 left-0 z-10"></div>
+        <div className="w-full lg:w-[70%] flex flex-col items-center lg:items-start gap-y-10 relative z-20">
+          <Heading
+            mainHeading={"Join the Clareva community."}
+            subHeading={"Join Us"}
+          />
+          <p className="text-text/80 text-lg">
+            Thousands of people are embracing healthier skincare habits with
+            Clareva every day. Whether you're beginning your skincare journey or
+            refining an established routine, we're here to help you discover
+            products that bring out your skin's natural radiance.
+          </p>
+          <h4 className="text-3xl font-heading ">
+            Because healthy skin isn't a trend -it's a lifelong investment.
+          </h4>
+          <div className="flex flex-col lg:flex-row gap-x-5 gap-y-5 lg:gap-y-0">
+            <CtaButton>Shop Now</CtaButton>
+            <OutlineButton>Build My Routine</OutlineButton>
           </div>
+        </div>
       </section>
     </div>
   );

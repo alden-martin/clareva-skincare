@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import WhatsappButton from "./WhatsappButton";
 
 const hideLayoutPaths = ["/login", "/signup"];
 
@@ -14,6 +15,7 @@ export default function LayoutWrapper({ children }) {
     <>
       {!hideLayout && <Navbar />}
       {children}
+      {!hideLayout && <WhatsappButton />}
       {!hideLayout && <Footer />}
     </>
   );

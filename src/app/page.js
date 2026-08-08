@@ -14,6 +14,7 @@ import { number } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Ingredeints from "@/components/Ingredeints";
 import {products} from '@/utils/products'
+import Testimonials from "@/components/Testimonials"
 export default function Home() {
   const stats = [
     {
@@ -104,7 +105,7 @@ export default function Home() {
       link: "/skin-types/sensitive-skin",
       image: "/skin-types/sensitive.png",
     },
-    {
+      {
       title: "Dark Spots",
       description: "Brighten with intention.",
       link: "/skin-types/dark-spots",
@@ -127,37 +128,37 @@ export default function Home() {
   ];
   const instaLink = ["DZo4IF8IHK3", "DYUbWLrIieS", "DXcSEBLjfIi"];
   const ingredients = [
-  {
-    name: "Niacinamide",
-    description:
-      "Refines pores, strengthens the barrier and visibly evens tone over 28 days.",
-    per: "10%",
-  },
-  {
-    name: "Salicylic Acid",
-    description:
-      "Lipid-soluble exfoliant that gently decongests pores prone to breakouts.",
-    per: "2%",
-  },
-  {
-    name: "Vitamin C",
-    description:
-      "Stabilised ascorbic acid brightens, lifts dullness and shields against pollution.",
-    per: "15%",
-  },
-  {
-    name: "Hyaluronic Acid",
-    description:
-      "Multi-molecular hydration that plumps without heaviness — built for humid climates.",
-    per: "3-weight",
-  },
-  {
-    name: "Ceramides",
-    description:
-      "Mimic the skin's own lipids, sealing in moisture and repairing barrier damage.",
-    per: "Complex 3",
-  },
-];
+    {
+      name: "Niacinamide",
+      description:
+        "Refines pores, strengthens the barrier and visibly evens tone over 28 days.",
+      per: "10%",
+    },
+    {
+      name: "Salicylic Acid",
+      description:
+        "Lipid-soluble exfoliant that gently decongests pores prone to breakouts.",
+      per: "2%",
+    },
+    {
+      name: "Vitamin C",
+      description:
+        "Stabilised ascorbic acid brightens, lifts dullness and shields against pollution.",
+      per: "15%",
+    },
+    {
+      name: "Hyaluronic Acid",
+      description:
+        "Multi-molecular hydration that plumps without heaviness -built for humid climates.",
+      per: "3-weight",
+    },
+    {
+      name: "Ceramides",
+      description:
+        "Mimic the skin's own lipids, sealing in moisture and repairing barrier damage.",
+      per: "Complex 3",
+    },
+  ];
   return (
     <div className=" ">
       {/* Hero Section */}
@@ -166,7 +167,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-[url('/hero/new-hero.jpeg')] bg-cover lg:bg-center bg-position-[90%] " />
 
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-linear-to-r from-hero-background via-hero-background/90 via-30% to-transparent opacity-90 lg:opacity-100" />
+        <div className="absolute inset-0 bg-linear-to-r from-hero-background via-hero-background/90 via-50% lg:via-30% to-transparent opacity-90 lg:opacity-100" />
 
         {/* Content */}
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 items-center min-h-screen">
@@ -185,13 +186,17 @@ export default function Home() {
             {/* Description */}
             <p className="text-text/80 font-light text-lg w-[90%] my-5">
               Dermatologist-backed skincare formulated for the climate, water
-              and skin of South Asia — clinical inside, poetic outside.
+              and skin of South Asia - clinical inside, poetic outside.
             </p>
 
             {/* Button Container */}
             <div className="flex gap-x-5 my-10 flex-col lg:flex-row gap-y-5 lg:gap-y-0">
-              <CtaButton>Shop The Edit</CtaButton>
-              <OutlineButton>Build My Routine</OutlineButton>
+              <Link href={"/shop"}>
+                <CtaButton>Shop Clareva</CtaButton>
+              </Link>
+              <Link href="/story">
+                <OutlineButton>About Clareva</OutlineButton>
+              </Link>
             </div>
 
             {/* Stats */}
@@ -238,7 +243,11 @@ export default function Home() {
       {/* Product Line */}
       <section className="flex justify-between items-center px-0 flex-wrap lg:flex-nowrap gap-y-3 lg:gap-y-0 lg:px-10 py-5">
         {productLine.map((line, index) => (
-          <div key={index} className="flex flex-col items-center ">
+          <Link
+            href="/shop"
+            key={index}
+            className="flex flex-col items-center "
+          >
             <Image
               src={`/productsLine/${index + 1}.png`}
               className="rounded-full"
@@ -246,13 +255,13 @@ export default function Home() {
               width={100}
               height={100}
             />
-            <Link
+            <p
               className="text-sm  font-light  hover:font-normal hover:underline text-text/80 hover:text-text"
-              href={""}
+              href={"shop"}
             >
               {line}
-            </Link>
-          </div>
+            </p>
+          </Link>
         ))}
       </section>
       {/* The Edit */}
@@ -264,6 +273,16 @@ export default function Home() {
         />
         <div className="relative ">
           <ProductList />
+        </div>
+      </section>
+      {/* Testimonial Section */}
+      <section className="flex flex-col gap-y-10 px-10 py-20 bg-background ">
+        <Heading
+          subHeading="Testimonials"
+          mainHeading="See what others say"
+        />
+        <div className="relative ">
+          <Testimonials />
         </div>
       </section>
       {/* Video Section */}
@@ -355,14 +374,14 @@ export default function Home() {
           />
           <div className="text-text/70 font-light space-y-6 my-5 leading-relaxed  text-lg">
             <p>
-              Clareva was born in a Karachi summer — when shelves were full of
+              Clareva was born in a Karachi summer -when shelves were full of
               formulas built for European winters, and our skin was asking for
               something else entirely.
             </p>
             <p>
               We work alongside Pakistani dermatologists to study how heat, hard
               water and pollution behave on melanin-rich skin. Every actives
-              percentage, every excipient, every drop is decided in clinic — not
+              percentage, every excipient, every drop is decided in clinic -not
               in a marketing room.
             </p>
             <h3 className="text-text font-heading text-2xl font-semibold italic ">

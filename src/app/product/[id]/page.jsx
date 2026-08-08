@@ -8,12 +8,12 @@ import CtaButton from "@/components/CtaButton";
 import { toast } from "react-hot-toast";
 import { supabase } from "@/lib/supabaseClient";
 import { addToCart } from "@/utils/shop";
-import { useUser } from "@/contexts/UserContext";
+import { useCart } from "@/contexts/CartContext";
 
 function Page() {
   const { id } = useParams();
   const router = useRouter();
-  const { user, refreshCart } = useUser();
+  const { refreshCart } = useCart();
 
   // Initialize with empty/default structure matching the DB
   const [product, setProduct] = useState({
@@ -284,20 +284,14 @@ function Page() {
                   return;
                 }
                 try {
-                  await addToCart(
+                  await addToCart(  
                     product.id,
-                    user,
                     quantity,
                     selectedSize,
                     refreshCart,
                   );
                 } catch (error) {
-                  if (error.message === "User not found") {
-                    toast.error("Please sign in to add to cart");
-                    router.push("/signup");
-                  } else {
-                    toast.error(error.message);
-                  }
+                  toast.error(error.message);
                 }
               }}
             >

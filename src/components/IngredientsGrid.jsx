@@ -71,8 +71,8 @@ export default function IngredientsGrid() {
           subHeading={"The Formulary"}
         />
         <p className="text-text/80 text-lg">
-          Great skincare starts with great ingredients — chosen for what they
-          do, not what they promise.
+          Great skincare starts with great ingredients -chosen for what they do,
+          not what they promise.
         </p>
       </div>
       <div className="grid grid-cols-4 grid-rows-2 gap-4 mt-5">
