@@ -4,11 +4,12 @@ import Heading from "@/components/Heading";
 import OutlineButton from "@/components/OutlineButton";
 import ProductFilter from "@/components/ProductFilter";
 import RoutineBuilder from "@/components/RoutineBuilder";
-import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { useProducts } from "@/contexts/ProductContext";
 
 function page() {
+  const { products: allProducts } = useProducts();
   const [bundles, setBundles] = useState();
   const [disscountedProducts, setDisscountedProducts] = useState();
   const defaultBndles = [
@@ -81,7 +82,6 @@ function page() {
       oldPrice: "6,800",
     },
   ];
-  const [allProducts, setAllProdcuts] = useState([]);
 
   const stats = [
     {
@@ -98,26 +98,6 @@ function page() {
     },
   ];
 
-  const getAllProdcuts = async () => {
-
-
-
-
-
-
-  
-    console.log("Getting Product..");
-
-    const { data, error: fetchError } = await supabase
-      .from("products")
-      .select("*");
-    if (fetchError) {
-      console.log(fetchError);
-      return;
-    }
-    console.log(data);
-    setAllProdcuts(data);
-  };
   const getBundles = async () => {
     const filteredBundles = allProducts.filter((product) => {
       return product.name && product.name.toLowerCase().includes("bundle");
@@ -141,10 +121,6 @@ function page() {
       setDisscountedProducts(filteredDiscountedProducts);
     }
   };
-
-  useEffect(() => {
-    getAllProdcuts();
-  }, []);
 
   useEffect(() => {
     if (allProducts && allProducts.length > 0) {

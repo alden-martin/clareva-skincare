@@ -12,16 +12,14 @@ export default function ReelGallery({ reels, onOpen }) {
           className="relative aspect-9/16 overflow-hidden rounded-xl"
         >
           <video
-          src={reel.video}
-          autoPlay
-          muted={true}
-          loop={true}
-          playsInline
-          preload="auto"
-          className="w-full h-full object-cover"
-        />
-        <h2 className="text-">{reel.product.name}</h2>
-        <p className="text-primary">{reel.product.price}</p>
+            src={reel.video}
+            autoPlay
+            muted={true}
+            loop={true}
+            playsInline
+            preload="auto"
+            className="w-full h-full object-cover"
+          />
         </button>
       ))}
     </div>

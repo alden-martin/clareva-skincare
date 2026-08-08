@@ -4,6 +4,7 @@ import LayoutWrapper from "@/components/LayoutWrapper";
 import AosProvider from "@/providers/AosProvider";
 import { UserProvider } from "@/contexts/UserContext";
 import { CartProvider } from "@/contexts/CartContext";
+import { ProductProvider } from "@/contexts/ProductContext";
 import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
@@ -31,10 +32,12 @@ export default function RootLayout({ children }) {
         <AosProvider />
         <UserProvider>
           <CartProvider>
-            <LayoutWrapper>
-              {children}
-              <Toaster />
-            </LayoutWrapper>
+            <ProductProvider>
+              <LayoutWrapper>
+                {children}
+                <Toaster />
+              </LayoutWrapper>
+            </ProductProvider>
           </CartProvider>
         </UserProvider>
       </body>

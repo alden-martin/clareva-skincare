@@ -1,28 +1,14 @@
 "use client"
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import Image from "next/image";
 import CtaButton from "./CtaButton";
-import { supabase } from "@/lib/supabaseClient";
 import Heading from "./Heading";
+import { useProducts } from "@/contexts/ProductContext";
 
 function RoutineBuilder() {
-  const [allProducts, setAllProducts] = useState([]);
+  const { products: allProducts } = useProducts();
   const [morningState, setMorningState] = useState(true);
-
-  const getAllProducts = async () => {
-    console.log("Getting Product..");
-
-    const { data, error: fetchError } = await supabase
-      .from("products")
-      .select("*");
-    if (fetchError) {
-      console.log(fetchError);
-      return;
-    }
-    console.log(data);
-    setAllProducts(data);
-  };
 
   const morningProducts = allProducts.filter(
     (product) => product.use && product.use.toLowerCase().includes("day"),
@@ -32,10 +18,6 @@ function RoutineBuilder() {
     (product) => product.use && product.use.toLowerCase().includes("night"),
   );
 
-  useEffect(() => {
-    getAllProducts();
-    console.log(morningProducts);
-  }, []);
   const calcTotalPrice = () => {
     const products = morningState ? morningProducts : nightProducts;
     return products.reduce((total, item) => {
