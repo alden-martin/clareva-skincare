@@ -238,7 +238,7 @@ function page() {
                         PKR {bundle.price}
                       </span>
                     </div>
-                    <Link href="/shop">
+                    <Link href={`/product/${bundle?.id}`}>
                       <OutlineButton>Shop Bundle</OutlineButton>
                     </Link>
                   </div>
