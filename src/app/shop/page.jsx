@@ -207,7 +207,7 @@ function page() {
                   <Image
                     src={bundle.image}
                     fill
-                    alt={bundle.title}
+                    alt={bundle.name}
                     className="rounded-t-2xl object-cover"
                   />
                   <span className="bg-primary text-primary-foreground p-2 rounded-2xl top-3 left-3 text-xs absolute">
