@@ -7,6 +7,7 @@ import RoutineBuilder from "@/components/RoutineBuilder";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useProducts } from "@/contexts/ProductContext";
+import Link from "next/link";
 
 function page() {
   const { products: allProducts } = useProducts();
@@ -199,7 +200,7 @@ function page() {
             {bundles.map((bundle, index) => (
               <div
                 key={index}
-                className="bg-primary-foreground flex flex-col rounded-2xl"
+                className="bg-primary-foreground flex flex-col rounded-2xl "
               >
                 {/* Upper */}
                 <div className="relative h-125 w-full">
@@ -217,7 +218,7 @@ function page() {
                 <div className="flex flex-col mx-10 my-5 gap-y-5">
                   {/* Products */}
                   <div className="flex flex-row gap-x-3">
-                    {bundle.products.map((product, index) => (
+                    {bundle?.products?.map((product, index) => (
                       <span
                         key={index}
                         className="text-primary text-sm uppercase"
@@ -226,7 +227,7 @@ function page() {
                       </span>
                     ))}
                   </div>
-                  <h1 className="text-3xl font-heading">{bundle.title}</h1>
+                  <h1 className="text-3xl font-heading max-w-full text-wrap">{bundle.name}</h1>
                   <p className="text-text/80 text-base">{bundle.description}</p>
                   <div className="flex flex-row justify-between items-end">
                     <div className="flex flex-col">
@@ -237,7 +238,9 @@ function page() {
                         PKR {bundle.price}
                       </span>
                     </div>
-                    <OutlineButton>Shop Bundle</OutlineButton>
+                    <Link href="/shop">
+                      <OutlineButton>Shop Bundle</OutlineButton>
+                    </Link>
                   </div>
                 </div>
               </div>
