@@ -5,14 +5,21 @@ import OutlineButton from "@/components/OutlineButton";
 import ProductFilter from "@/components/ProductFilter";
 import RoutineBuilder from "@/components/RoutineBuilder";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useProducts } from "@/contexts/ProductContext";
 import Link from "next/link";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import "swiper/css";
+import "swiper/css/navigation";
 
 function page() {
   const { products: allProducts } = useProducts();
   const [bundles, setBundles] = useState();
   const [disscountedProducts, setDisscountedProducts] = useState();
+  const productsPrevRef = useRef(null);
+  const productsNextRef = useRef(null);
   const defaultBndles = [
     {
       image: "/bundles/radience.png",
@@ -130,6 +137,15 @@ function page() {
     }
   }, [allProducts]);
 
+  // Filter out bundles and discounted products for the "All Products" section
+  const regularProducts =
+    allProducts?.filter((product) => {
+      const isBundle =
+        product.name && product.name.toLowerCase().includes("bundle");
+      const isDiscounted = product.discounted_price;
+      return !isBundle && !isDiscounted;
+    }) || [];
+
   return (
     <div className="flex flex-col w-screen ">
       {/* Hero Section */}
@@ -211,31 +227,42 @@ function page() {
                     className="rounded-t-2xl object-cover"
                   />
                   <span className="bg-primary text-primary-foreground p-2 rounded-2xl top-3 left-3 text-xs absolute">
-                    SAVE {bundle.discounted_price}
+                    SAVE {bundle.price - bundle.discounted_price}
                   </span>
                 </div>
                 {/* Lower */}
                 <div className="flex flex-col mx-10 my-5 gap-y-5">
+                  {/* Tag */}
+                  {bundle.tagline && (
+                    <p className="text-primary text-sm uppercase font-semibold">
+                      {bundle.tagline}
+                    </p>
+                  )}
                   {/* Products */}
                   <div className="flex flex-row gap-x-3">
                     {bundle?.products?.map((product, index) => (
                       <span
                         key={index}
-                        className="text-primary text-sm uppercase"
+                        className="text-text/60 text-sm uppercase"
                       >
                         {product}
                       </span>
                     ))}
                   </div>
-                  <h1 className="text-3xl font-heading max-w-full text-wrap">{bundle.name}</h1>
+                  <h1 className="text-3xl font-heading max-w-full text-wrap">
+                    {bundle.name}
+                  </h1>
                   <p className="text-text/80 text-base">{bundle.description}</p>
                   <div className="flex flex-row justify-between items-end">
                     <div className="flex flex-col">
                       <span className="font-heading text-3xl">
                         PKR {bundle.discounted_price}
                       </span>
-                      <span className="font-heading text-xl line-through">
+                      <span className="font-heading text-xl line-through text-text/50">
                         PKR {bundle.price}
+                      </span>
+                      <span className="text-primary text-sm font-semibold">
+                        SAVE PKR {bundle.price - bundle.discounted_price}
                       </span>
                     </div>
                     <Link href={`/product/${bundle?.id}`}>
@@ -299,7 +326,93 @@ function page() {
       )}
       {/* All Products */}
       <section className="flex flex-col items-center justify-center mx-10 py-20 gap-y-5">
-        <ProductFilter products={allProducts} />
+        <div className="w-full flex justify-between items-center">
+          <div>
+            <Heading
+              mainHeading={"All Products"}
+              subHeading={"The Products"}
+              container="flex flex-col gap-y-5"
+            />
+            <p className="text-text/80 text-lg">All Clareva Products</p>
+          </div>
+          <div className="hidden lg:flex gap-4">
+            <button
+              ref={productsPrevRef}
+              className="border border-black p-2 rounded-full hover:bg-black hover:text-white transition-all"
+            >
+              <ArrowLeft />
+            </button>
+            <button
+              ref={productsNextRef}
+              className="border border-black p-2 rounded-full hover:bg-black hover:text-white transition-all"
+            >
+              <ArrowRight />
+            </button>
+          </div>
+        </div>
+        <div className="w-full">
+          <Swiper
+            spaceBetween={24}
+            slidesPerView={3}
+            modules={[Navigation]}
+            onBeforeInit={(swiper) => {
+              swiper.params.navigation.prevEl = productsPrevRef.current;
+              swiper.params.navigation.nextEl = productsNextRef.current;
+            }}
+            navigation={{
+              prevEl: productsPrevRef.current,
+              nextEl: productsNextRef.current,
+            }}
+            breakpoints={{
+              0: {
+                slidesPerView: 1,
+              },
+              768: {
+                slidesPerView: 2,
+              },
+              1024: {
+                slidesPerView: 3,
+              },
+            }}
+            className="w-full"
+          >
+            {regularProducts && regularProducts.length > 0 ? (
+              regularProducts.map((product, index) => (
+                <SwiperSlide key={index}>
+                  <div className="bg-primary-foreground p-5 rounded-2xl flex flex-col gap-y-5 justify-between h-full">
+                    <div className="relative self-center h-72 w-72">
+                      <Image
+                        src={product.image}
+                        fill
+                        alt={product.name}
+                        className="rounded-2xl object-cover"
+                      />
+                    </div>
+                    <h1 className="text-3xl font-heading">{product.name}</h1>
+                    <p className="text-text/80 text-base">{product.tagline}</p>
+                    <div className="flex flex-row justify-between items-end">
+                      <div className="flex flex-col">
+                        <span className="font-heading text-3xl">
+                          PKR {product.discounted_price || product.price}
+                        </span>
+                        {product.discounted_price && (
+                          <span className="font-heading text-xl line-through">
+                            PKR {product.price}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <Link href={`/product/${product?.id}`}>
+                      <CtaButton>Shop Product</CtaButton>
+                    </Link>
+                  </div>
+                </SwiperSlide>
+              ))
+            ) : (
+              <p className="text-text/80 text-lg">No products found</p>
+            )}
+          </Swiper>
+        </div>
       </section>
       {/* Routine Builder */}
       <section className="flex flex-col items-center my-10 ">
@@ -307,11 +420,11 @@ function page() {
       </section>
       {/* Newsletter */}
       <section className="bg-card p-10">
-        <div className="bg-primary-foreground rounded-2xl shadow-2xl items-center flex flex-col  lg:flex-row justify-between p-10 gap-y-5 lg:gap-y-0">
+        <div className="bg-primary-foreground rounded-2xl shadow-2xl items-center flex flex-col  lg:flex-row justify-between lg:p-10 p-5 gap-y-5 lg:gap-y-0">
           <div className=" w-full lg:w-1/2 flex flex-col gap-y-10">
             <Heading
               subHeading={"Join the ritual"}
-              mainHeading={"Receive skincare stories & early access."}
+              mainHeading={"Receive skincare stories"}
             />
             <p className="text-text/80">
               Slow, considered emails from the Clareva atelier -new launches,

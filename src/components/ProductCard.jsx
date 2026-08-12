@@ -16,13 +16,12 @@ function ProductCard({ name, size, price, pros, id, image }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative">
+      <div className="relative aspect-square">
         <Image
           src={image}
           alt={name}
-          width={500}
-          height={500}
-          className="w-full h-auto rounded-2xl object-cover"
+          fill
+          className="rounded-2xl object-cover"
         />
         {isHovered && (
           <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2 transition-all w-full  justify-center">

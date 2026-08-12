@@ -171,14 +171,15 @@ function page() {
     console.log("Checkout");
   };
   return (
-    <div className="mt-20 flex justify-center items-center">
-      <div className="flex flex-col w-fit p-10 bg-card m-10 rounded-2xl min-w-2xl">
+    <div className="mt-20 flex justify-center items-center px-4 lg:px-0">
+      <div className="flex flex-col w-full max-w-4xl p-4 lg:p-10 bg-card m-4 lg:m-10 rounded-2xl">
         <div className="flex w-full justify-between items-center border-b border-secondary pb-4 mb-6">
-          <h1 className="text-3xl font-bold">Checkout</h1>
+          <h1 className="text-2xl lg:text-3xl font-bold">Checkout</h1>
           <Home
             onClick={() => {
               router.push("/");
             }}
+            className="cursor-pointer"
           />
         </div>
 
@@ -190,9 +191,9 @@ function page() {
             cartProducts.map((product) => (
               <div
                 key={product.id}
-                className="flex items-center gap-4 p-4 bg-secondary/50 hover:bg-secondary/70 rounded-lg"
+                className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 bg-secondary/50 hover:bg-secondary/70 rounded-lg"
               >
-                <div className="w-20 h-20 bg-background rounded-lg flex items-center justify-center">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-background rounded-lg flex items-center justify-center shrink-0">
                   {product.image ? (
                     <img
                       src={product.image}
@@ -203,13 +204,20 @@ function page() {
                     <span className="text-text/65 text-xs">No image</span>
                   )}
                 </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold">{product.name}</h3>
+                <div className="flex-1 w-full">
+                  <h3 className="font-semibold text-sm lg:text-base">
+                    {product.name}
+                  </h3>
                   <p className="text-sm text-text/65">{product.price}</p>
                   <p className="text-sm font-medium">Qty: {product.amount}</p>
                 </div>
-                <Link href={`/product/${product.id}`}>
-                  <CtaButton>View product</CtaButton>
+                <Link
+                  href={`/product/${product.id}`}
+                  className="w-full sm:w-auto"
+                >
+                  <CtaButton className="w-full sm:w-auto text-sm">
+                    View product
+                  </CtaButton>
                 </Link>
               </div>
             ))
@@ -247,7 +255,7 @@ function page() {
               onChange={(e) =>
                 setCustomerDetails({ ...customerDetails, name: e.target.value })
               }
-              className="border border-secondary-foreground p-3 rounded-lg bg-background"
+              className="border border-secondary-foreground p-3 rounded-lg bg-background w-full"
             />
             <input
               type="tel"
@@ -260,7 +268,7 @@ function page() {
                   phone: e.target.value,
                 })
               }
-              className="border border-secondary-foreground p-3 rounded-lg bg-background"
+              className="border border-secondary-foreground p-3 rounded-lg bg-background w-full"
             />
             <input
               type="email"
@@ -273,7 +281,7 @@ function page() {
                   email: e.target.value,
                 })
               }
-              className="border border-secondary-foreground p-3 rounded-lg bg-background"
+              className="border border-secondary-foreground p-3 rounded-lg bg-background w-full"
             />
           </div>
         </div>
@@ -287,12 +295,12 @@ function page() {
               value={address}
               onChange={(e) => setAddress(e.target.value)}
               placeholder="Enter your address"
-              className="border border-secondary-foreground p-3 rounded-lg bg-background"
+              className="border border-secondary-foreground p-3 rounded-lg bg-background w-full"
             />
             <div className="flex gap-2">
               <CtaButton
                 clickFunction={getCurrentLocation}
-                changeStyle="bg-secondary text-text hover:bg-secondary/80 px-4 py-2 rounded-lg text-sm font-medium"
+                changeStyle="bg-secondary text-text hover:bg-secondary/80 px-4 py-2 rounded-lg text-sm font-medium w-full sm:w-auto"
               >
                 Use Current Location
               </CtaButton>
@@ -304,16 +312,16 @@ function page() {
           <h2 className="text-lg font-semibold mb-3">Payment Method</h2>
           <div className="flex flex-col gap-3">
             {[
-              // {
-              //   id: "easypaisa",
-              //   name: "EasyPaisa",
-              //   details: "Send payment to 03XX-XXXXXXX",
-              // },
-              // {
-              //   id: "jazzcash",
-              //   name: "JazzCash",
-              //   details: "Title: \nSend payment to 03XX-XXXXXXX",
-              // },
+              {
+                id: "easypaisa",
+                name: "EasyPaisa",
+                details: "Send payment to  0321-2049947",
+              },
+              {
+                id: "jazzcash",
+                name: "JazzCash",
+                details: "Title: \nSend payment to  0321-2049947",
+              },
               {
                 id: "bank",
                 name: "Bank Transfer",
@@ -347,10 +355,12 @@ function page() {
                     onChange={() => setSelectedPaymentMethod(method.id)}
                     className="w-4 h-4"
                   />
-                  <span className="font-medium">{method.name}</span>
+                  <span className="font-medium text-sm lg:text-base">
+                    {method.name}
+                  </span>
                 </div>
                 {selectedPaymentMethod === method.id && (
-                  <div className="mt-3 pt-3 border-t border-secondary-foreground/30 text-sm text-text/65 whitespace-pre-line">
+                  <div className="mt-3 pt-3 border-t border-secondary-foreground/30 text-xs sm:text-sm text-text/65 whitespace-pre-line">
                     {method.details}
                   </div>
                 )}
@@ -364,7 +374,7 @@ function page() {
           <div className="flex flex-col gap-3">
             <input
               type="text"
-              className="border border-secondary-foreground rounded-lg py-2 px-4"
+              className="border border-secondary-foreground rounded-lg py-2 px-4 w-full"
               value={userCoupon}
               onChange={(e) => setUserCoupon(e.target.value)}
             />
@@ -391,6 +401,7 @@ function page() {
 
             setOpen(true);
           }}
+          className="w-full sm:w-auto"
         >
           Confirm Checkout
         </CtaButton>
