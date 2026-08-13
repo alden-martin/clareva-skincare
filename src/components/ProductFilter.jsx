@@ -38,7 +38,7 @@ function ProductFilter({ products }) {
           <p className="text-text/80 text-lg">All Clareva Products</p>
         </div>
         {/* Button Container */}
-        <div className="flex flex-row gap-x-5">
+        <div className="flex flex-row gap-x-5 flex-wrap gap-y-2 lg:gap-y-0">
           {types.map((type, index) =>
             selected === index ? (
               <div key={index} onClick={() => setSelected(index)}>
