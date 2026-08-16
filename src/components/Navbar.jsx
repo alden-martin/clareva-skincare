@@ -143,6 +143,10 @@ function Navbar() {
   }, []);
   const pages = [
     {
+      name: "Home",
+      href: "/",
+    },
+    {
       name: "Shop",
       href: "/shop",
     },

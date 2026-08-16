@@ -180,13 +180,13 @@ function Testimonials() {
         </div>
         {/* Desktop navigation */}
         <button
-          onClick={() => swiperRef.current?.slidePrev()}
+          onClick={() => swiperRef.current?.swiper?.slidePrev()}
           className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 lg:-translate-x-4 bg-primary text-primary-foreground p-3 md:p-4 w-12 h-12 md:w-14 md:h-14 rounded-full z-10 hover:bg-primary/90 transition cursor-pointer"
         >
           <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" />
         </button>
         <button
-          onClick={() => swiperRef.current?.slideNext()}
+          onClick={() => swiperRef.current?.swiper?.slideNext()}
           className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 lg:translate-x-4 bg-primary text-primary-foreground p-3 md:p-4 w-12 h-12 md:w-14 md:h-14 rounded-full z-10 hover:bg-primary/90 transition cursor-pointer"
         >
           <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
@@ -194,13 +194,13 @@ function Testimonials() {
         {/* Mobile navigation */}
         <div className="flex md:hidden justify-center gap-4 mt-6">
           <button
-            onClick={() => swiperRef.current?.slidePrev()}
+            onClick={() => swiperRef.current?.swiper?.slidePrev()}
             className="bg-primary text-primary-foreground p-3 w-12 h-12 rounded-full hover:bg-primary/90 transition cursor-pointer"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
           <button
-            onClick={() => swiperRef.current?.slideNext()}
+            onClick={() => swiperRef.current?.swiper?.slideNext()}
             className="bg-primary text-primary-foreground p-3 w-12 h-12 rounded-full hover:bg-primary/90 transition cursor-pointer"
           >
             <ArrowRight className="w-5 h-5" />
