@@ -4,6 +4,7 @@ import Heading from "@/components/Heading";
 import OutlineButton from "@/components/OutlineButton";
 import ProductFilter from "@/components/ProductFilter";
 import RoutineBuilder from "@/components/RoutineBuilder";
+import { ProductCarousel, CARD_VARIANTS } from "@/components/ProductCarousel";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useProducts } from "@/contexts/ProductContext";
@@ -136,7 +137,7 @@ function page() {
       const isBundle =
         product.name && product.name.toLowerCase().includes("bundle");
       const isDiscounted = product.discounted_price;
-      return !isBundle && !isDiscounted;
+      return !isBundle;
     }) || [];
 
   return (
@@ -159,7 +160,7 @@ function page() {
             </h1>
 
             {/* Description */}
-            <p className="text-text/50 font-light text-lg w-[90%] my-5">
+            <p className="text-text/80 font-light text-lg w-[90%] my-5">
               Explore Clareva's complete collection of dermatologist-inspired
               skincare, thoughtfully formulated to nourish, protect, and enhance
               every skin type.
@@ -196,7 +197,7 @@ function page() {
       </section>
       {/* Bundles */}
       {bundles?.length > 0 && (
-        <section className="py-20 px-10 flex flex-col gap-y-5 bg-secondary">
+        <section className="py-20 px-5 lg:px-20 flex flex-col gap-y-5 bg-secondary">
           <Heading
             subHeading={"Curated together"}
             mainHeading={"Curated Skincare Bundles"}
@@ -205,67 +206,11 @@ function page() {
             Save more with complete skincare routines designed to work together
             for healthier, glowing skin.
           </p>
-          <div className="flex flex-col gap-y-5 lg:gap-y-0 lg:flex-row gap-x-10 items-center justify-center ">
-            {bundles.map((bundle, index) => (
-              <div
-                key={index}
-                className="bg-primary-foreground flex flex-col rounded-2xl "
-              >
-                {/* Upper */}
-                <div className="relative h-125 w-full">
-                  <Image
-                    src={bundle.image}
-                    fill
-                    alt={bundle.name}
-                    className="rounded-t-2xl object-cover"
-                  />
-                  <span className="bg-primary text-primary-foreground p-2 rounded-2xl top-3 left-3 text-xs absolute">
-                    SAVE {bundle.price - bundle.discounted_price}
-                  </span>
-                </div>
-                {/* Lower */}
-                <div className="flex flex-col mx-10 my-5 gap-y-5">
-                  {/* Tag */}
-                  {bundle.tagline && (
-                    <p className="text-primary text-sm uppercase font-semibold">
-                      {bundle.tagline}
-                    </p>
-                  )}
-                  {/* Products */}
-                  <div className="flex flex-row gap-x-3">
-                    {bundle?.products?.map((product, index) => (
-                      <span
-                        key={index}
-                        className="text-text/60 text-sm uppercase"
-                      >
-                        {product}
-                      </span>
-                    ))}
-                  </div>
-                  <h1 className="text-3xl font-heading max-w-full text-wrap">
-                    {bundle.name}
-                  </h1>
-                  <p className="text-text/80 text-base">{bundle.description}</p>
-                  <div className="flex flex-row justify-between items-end">
-                    <div className="flex flex-col">
-                      <span className="font-heading text-3xl">
-                        PKR {bundle.discounted_price}
-                      </span>
-                      <span className="font-heading text-xl line-through text-text/50">
-                        PKR {bundle.price}
-                      </span>
-                      <span className="text-primary text-sm font-semibold">
-                        SAVE PKR {bundle.price - bundle.discounted_price}
-                      </span>
-                    </div>
-                    <Link href={`/product/${bundle?.id}`}>
-                      <OutlineButton>Shop Bundle</OutlineButton>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <ProductCarousel
+            products={bundles}
+            variant={CARD_VARIANTS.BUNDLE}
+            slidesPerView={{ mobile: 1, tablet: 2, desktop: 3 }}
+          />
         </section>
       )}
 
@@ -278,43 +223,14 @@ function page() {
             container="flex flex-col items-center gap-2"
           />
           <p className="text-text/80 text-lg">
-            Enjoy exclusive savings on selected Clareva favourites -thoughtfully
-            priced, never compromised.
+            Enjoy exclusive savings on selected Clareva favourites -
+            thoughtfully priced, never compromised.
           </p>
-          <div className="flex flex-col gap-y-5 lg:gap-y-0 lg:flex-row items-stretch  justify-center gap-x-5  mx-20">
-            {disscountedProducts.map((product, index) => (
-              <div
-                key={index}
-                className="bg-primary-foreground p-5 rounded-2xl flex flex-col gap-y-5 justify-between"
-              >
-                <div className="relative self-center h-72 w-72 ">
-                  <Image
-                    src={product.image}
-                    fill
-                    alt={product.name}
-                    className="rounded-2xl object-cover"
-                  />
-                  <div className="absolute top-5 text-primary uppercase bg-primary-foreground p-2 text-sm rounded-2xl backdrop-blur-3xl left-5 z-20">
-                    Sale
-                  </div>
-                </div>
-                {/* Lowwer */}
-                <h1 className="text-3xl font-heading">{product.name}</h1>
-                <p className="text-text/80 text-base">{product.tagline}</p>
-                <div className="flex flex-row justify-between items-end">
-                  <div className="flex flex-col">
-                    <span className="font-heading text-3xl">
-                      PKR {product.discounted_price}
-                    </span>
-                    <span className="font-heading text-xl line-through">
-                      PKR {product.price}
-                    </span>
-                  </div>
-                </div>
-                <CtaButton>Shop Product</CtaButton>
-              </div>
-            ))}
-          </div>
+          <ProductCarousel
+            products={disscountedProducts}
+            variant={CARD_VARIANTS.DISCOUNTED}
+            slidesPerView={{ mobile: 1, tablet: 2, desktop: 3 }}
+          />
         </section>
       )}
       {/* All Products */}

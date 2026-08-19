@@ -134,7 +134,7 @@ function page() {
             </h1>
 
             {/* Description */}
-            <p className="text-text/50 font-light text-lg w-[90%] my-5">
+            <p className="text-text/80 font-light text-lg w-[90%] my-5">
               Whether you have questions about our products, need help choosing
               the right skincare routine, or require assistance with an order —
               our team is always happy to guide you on your skincare journey.
@@ -226,7 +226,6 @@ function page() {
           </form>
         </div>
       </section>
-
       {/* Personal Consultation */}
       <section className="grid grid-cols-1 lg:grid-cols-2 px-10 py-20 bg-secondary/50">
         {/* Left */}

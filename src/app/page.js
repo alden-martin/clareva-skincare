@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import Ingredeints from "@/components/Ingredeints";
 import {products} from '@/utils/products'
 import Testimonials from "@/components/Testimonials"
+import FeaturedBundle from "@/components/FeaturedBundle";
 export default function Home() {
   const stats = [
     {
@@ -275,12 +276,13 @@ export default function Home() {
           <ProductList />
         </div>
       </section>
+      {/* Featured Bundle */}
+      <section className="w-full px-10 py-20 bg-background">
+        <FeaturedBundle />
+      </section>
       {/* Testimonial Section */}
       <section className="flex flex-col gap-y-10 px-10 py-20 bg-background ">
-        <Heading
-          subHeading="Testimonials"
-          mainHeading="See what others say"
-        />
+        <Heading subHeading="Testimonials" mainHeading="See what others say" />
         <div className="relative ">
           <Testimonials />
         </div>

@@ -200,7 +200,7 @@ export default function Story() {
             </h1>
 
             {/* Description */}
-            <p className="text-text/50 font-light text-lg w-[90%] my-5">
+            <p className="text-text/80 font-light text-lg w-[90%] my-5">
               At Clareva, we believe skincare is more than a daily routine —
               it's an act of self-care and confidence. We craft science-backed
               solutions that help you achieve healthier, brighter, naturally

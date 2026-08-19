@@ -11,11 +11,19 @@ function RoutineBuilder() {
   const [morningState, setMorningState] = useState(true);
 
   const morningProducts = allProducts.filter(
-    (product) => product.use && product.use.toLowerCase().includes("day"),
+    (product) =>
+      product.use &&
+      product.use.toLowerCase().includes("day") &&
+      !product.use.toLowerCase().includes("night") &&
+      !product.name.toLowerCase().includes("bundle"),
   );
 
   const nightProducts = allProducts.filter(
-    (product) => product.use && product.use.toLowerCase().includes("night"),
+    (product) =>
+      product.use &&
+      product.use.toLowerCase().includes("night") &&
+      !product.use.toLowerCase().includes("day") &&
+      !product.name.toLowerCase().includes("bundle"),
   );
 
   const calcTotalPrice = () => {
@@ -26,18 +34,20 @@ function RoutineBuilder() {
     }, 0);
   };
 
+  const currentProducts = morningState ? morningProducts : nightProducts;
+
   return (
     nightProducts.length > 0 &&
     morningProducts.length > 0 && (
-      <div className="flex flex-col items-center lg:items-start">
+      <div className="flex flex-col items-center lg:items-start w-full px-4 lg:px-0">
         <Heading
           subHeading="Routine Builder"
           mainHeading="Your ritual, <br/> four soft steps"
         />
-        <div className="relative flex flex-col  items-center mb-10 lg:w-auto lg:max-w-full -ml-5 lg:ml-0 w-screen">
+        <div className="relative flex flex-col items-center w-full max-w-6xl mt-10">
           {/* Toggle Button */}
           <div
-            className="flex gap-x-4 bg-white rounded-2xl p-1 absolute left-[50%] -translate-x-1/2 lg:left-[80%] lg:right-0 lg:top-4 top-5 w-fit"
+            className="flex gap-x-4 bg-white rounded-2xl p-1 shadow-lg"
             onClick={() => setMorningState(!morningState)}
           >
             <button
@@ -54,50 +64,30 @@ function RoutineBuilder() {
             </button>
           </div>
           {/* Routine Cards */}
-          <div className="grid grid-cols-1 my-10 items-center lg:grid-cols-4 gap-x-4 gap-y-5 w-fit lg:w-full justify-center mt-30 ">
-            {morningState
-              ? morningProducts.map((item) => (
-                  <div
-                    key={item.id}
-                    className="p-5 bg-white rounded-2xl  h-112"
-                  >
-                    <Image
-                      src={item.image}
-                      alt={item.name}
-                      width={250}
-                      height={250}
-                      className="rounded-2xl mr-2 ml-2"
-                    />
-                    <h1 className="font-heading text-2xl mt-5 mx-[10%] font-semibold text-secondary-foreground">
-                      {item.name}
-                    </h1>
-                    <p className="font-body text-sm font-light text-text mx-[10%] ">
-                      {item.tagline}
-                    </p>
-                  </div>
-                ))
-              : nightProducts.map((item) => (
-                  <div
-                    key={item.id}
-                    className="p-4 bg-white rounded-2xl  h-112"
-                  >
-                    <Image
-                      src={item.image}
-                      alt={item.name}
-                      width={250}
-                      height={250}
-                      className="rounded-2xl mr-2 ml-2"
-                    />
-                    <h1 className="font-heading text-2xl mt-5 mx-[10%] font-semibold text-secondary-foreground">
-                      {item.name}
-                    </h1>
-                    <p className="font-body text-sm font-light text-text mx-[10%] ">
-                      {item.tagline}
-                    </p>
-                  </div>
-                ))}
+          <div className="mt-10 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {currentProducts.map((item) => (
+              <div
+                key={item.id}
+                className="p-6 bg-white rounded-2xl flex flex-col items-center shadow-md"
+              >
+                <div className="relative w-48 h-48 md:w-56 md:h-56 mb-4">
+                  <Image
+                    src={item.image}
+                    alt={item.name}
+                    fill
+                    className="rounded-2xl object-cover"
+                  />
+                </div>
+                <h1 className="font-heading text-lg md:text-xl font-semibold text-secondary-foreground text-center">
+                  {item.name}
+                </h1>
+                <p className="font-body text-sm md:text-base font-light text-text text-center mt-2">
+                  {item.tagline}
+                </p>
+              </div>
+            ))}
           </div>
-          <CtaButton>
+          <CtaButton className="mt-8">
             Add Full Routine Rs {calcTotalPrice().toString()}
           </CtaButton>
         </div>
