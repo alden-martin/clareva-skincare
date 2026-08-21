@@ -50,8 +50,8 @@ export default function Home() {
     },
   ];
   const productLine = [
-    "Sunscreen",
-    "Haircare",
+    "Serum",
+    "Face wash",
     "Tones",
     "Serums",
     "Patches",
@@ -245,7 +245,7 @@ export default function Home() {
       <section className="flex justify-between items-center px-0 flex-wrap lg:flex-nowrap gap-y-3 lg:gap-y-0 lg:px-10 py-5">
         {productLine.map((line, index) => (
           <Link
-            href="/shop"
+            href="/shop/#all-products"
             key={index}
             className="flex flex-col items-center "
           >
