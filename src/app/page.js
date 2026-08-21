@@ -52,7 +52,7 @@ export default function Home() {
   const productLine = [
     "Serum",
     "Face wash",
-    "Tones",
+    "Hair care",
     "Serums",
     "Patches",
     "Lip Balms",
