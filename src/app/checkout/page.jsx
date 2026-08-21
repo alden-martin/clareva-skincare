@@ -245,21 +245,23 @@ function page() {
         </div>
         {/* Customer Details */}
         <div className="my-6 w-full">
-          <h2 className="text-lg font-semibold mb-3">Customer Details</h2>
+          <h2 className="text-lg font-semibold mb-3">Your Details</h2>
           <div className="flex flex-col gap-3">
             <input
               type="text"
               name="name"
               placeholder="Full Name"
               value={customerDetails.name}
+              required
               onChange={(e) =>
                 setCustomerDetails({ ...customerDetails, name: e.target.value })
               }
               className="border border-secondary-foreground p-3 rounded-lg bg-background w-full"
-            />
+              />
             <input
               type="tel"
               name="phone"
+              required
               placeholder="Phone Number"
               value={customerDetails.phone}
               onChange={(e) =>
@@ -269,10 +271,11 @@ function page() {
                 })
               }
               className="border border-secondary-foreground p-3 rounded-lg bg-background w-full"
-            />
+              />
             <input
               type="email"
               name="email"
+              required
               placeholder="Email"
               value={customerDetails.email}
               onChange={(e) =>

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Badge } from './ui/badge';
 import { supabase } from "@/lib/supabaseClient";
 import toast from "react-hot-toast";
+import emailjs from "@emailjs/browser";
 
 function CheckoutModal({
   open,
@@ -52,6 +53,43 @@ function CheckoutModal({
     }
   };
 
+  const sendOrderEmail = async () => {
+    const productsList = cart
+      ?.map(
+        (item, index) =>
+          `${index + 1}. ${item.name || item.product_name} - ${item.quantity || 1}x - PKR ${item.price || item.discounted_price || item.product_price}`,
+      )
+      .join("\n");
+
+    const templateParams = {
+      to_email: "clarevaskincare@gmail.com",
+      from_name: customerDetails?.name || "Customer",
+      from_email: customerDetails?.email || "",
+      customer_name: customerDetails?.name || "",
+      customer_email: customerDetails?.email || "",
+      customer_phone: customerDetails?.phone || "",
+      payment_method: method?.name || "",
+      delivery_address: address || "",
+      order_items: productsList || "",
+      coupon: coupon
+        ? `${coupon.title} - ${coupon.discountPercentage}% off`
+        : "None",
+      total: `PKR ${total?.toLocaleString()}` || "",
+      order_status: "Pending",
+    };
+
+    emailjs
+      .send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
+        templateParams,
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
+      )
+      .catch((error) => {
+        console.error("Error sending order email:", error);
+      });
+  };
+
   const handleCheckout = async () => {
     // console.log(cart);
     // console.log(coupon);
@@ -71,6 +109,8 @@ function CheckoutModal({
 
       toast.error(orderError.message);
     } else {
+      // Send order confirmation email (fire and forget, won't block user)
+      sendOrderEmail();
       // Clear cart after successful order
       await clearCart();
       // Update coupon usage if coupon was used

@@ -14,76 +14,6 @@ function page() {
   const { products: allProducts } = useProducts();
   const [bundles, setBundles] = useState();
   const [disscountedProducts, setDisscountedProducts] = useState();
-  const defaultBndles = [
-    {
-      image: "/bundles/radience.png",
-      discount: "22%",
-      title: "The Radiance Ritual",
-      products: ["Cleanser", "Serum", "Moisturiser"],
-      description:
-        "A three-step routine designed to restore a lit-from-within glow.",
-      newPrice: "8,900",
-      oldPrice: "11,400",
-    },
-    {
-      image: "/bundles/duo.png",
-      discount: "18%",
-      title: "Glow Essentials Duo",
-      products: ["Vitamin C Serum", "Barrier Cream"],
-      description:
-        "The essential pairing for dewy, even-toned skin from morning to night.",
-      newPrice: "6,400",
-      oldPrice: "7,800",
-    },
-    {
-      image: "/bundles/restore.png",
-      discount: "21%",
-      title: "Overnight Restore Set",
-      products: ["Retinol", "Recovery Oil", "Balm"],
-      description:
-        "A cocooning ritual formulated to renew skin while you rest.",
-      newPrice: "12,200",
-      oldPrice: "15,600",
-    },
-  ];
-  const products = [
-    {
-      image: "/products-image/gel.png",
-      badge: "-17%",
-      title: "Rose Quartz Cleansing Gel",
-      tagline: "Gentle daily cleanse",
-      rating: 4.9,
-      newPrice: "2,650",
-      oldPrice: "3,200",
-    },
-    {
-      image: "/products-image/cream.png",
-      badge: "Sale",
-      title: "Velvet Peach Cream Wash",
-      tagline: "Softens & soothes",
-      rating: 4.8,
-      newPrice: "2,900",
-      oldPrice: "3,500",
-    },
-    {
-      image: "/products-image/serum.png",
-      badge: "-21%",
-      title: "Amber Vitamin C Serum",
-      tagline: "Brightens dull skin",
-      rating: 5.0,
-      newPrice: "4,100",
-      oldPrice: "5,200",
-    },
-    {
-      image: "/products-image/elixir.png",
-      badge: "Bestseller",
-      title: "Retinol Renewal Elixir",
-      tagline: "Overnight resurfacing",
-      rating: 4.9,
-      newPrice: "5,400",
-      oldPrice: "6,800",
-    },
-  ];
 
   const stats = [
     {
@@ -136,7 +66,6 @@ function page() {
     allProducts?.filter((product) => {
       const isBundle =
         product.name && product.name.toLowerCase().includes("bundle");
-      const isDiscounted = product.discounted_price;
       return !isBundle;
     }) || [];
 
@@ -168,8 +97,12 @@ function page() {
 
             {/* Button Container */}
             <div className="flex gap-x-5 my-10">
+              <Link href="/shop/#bundles">
               <CtaButton>Shop Collection</CtaButton>
-              <OutlineButton>Explore Rituals</OutlineButton>
+              </Link>
+              <Link href="/shop/#all-products">
+              <OutlineButton>Explore Products</OutlineButton>
+              </Link>
             </div>
 
             {/* Stats */}
@@ -197,7 +130,9 @@ function page() {
       </section>
       {/* Bundles */}
       {bundles?.length > 0 && (
-        <section className="py-20 px-5 lg:px-20 flex flex-col gap-y-5 bg-secondary">
+        <section className="py-20 px-5 lg:px-20 flex flex-col gap-y-5 bg-secondary"
+        id="bundles"
+        >
           <Heading
             subHeading={"Curated together"}
             mainHeading={"Curated Skincare Bundles"}
@@ -234,7 +169,9 @@ function page() {
         </section>
       )}
       {/* All Products */}
-      <section className="flex flex-col items-center justify-center mx-10 py-20 gap-y-5">
+      <section className="flex flex-col items-center justify-center mx-10 py-20 gap-y-5"
+      id="all-products"
+      >
         <ProductFilter products={regularProducts} />
       </section>
       {/* Routine Builder */}

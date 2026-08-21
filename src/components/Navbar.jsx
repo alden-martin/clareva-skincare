@@ -14,14 +14,21 @@ import { motion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
 import { useUser } from "@/contexts/UserContext";
 import { useCart } from "@/contexts/CartContext";
+import { useProducts } from "@/contexts/ProductContext";
+import Image from "next/image";
 import toast from "react-hot-toast";
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
   const pathname = usePathname();
   const { user } = useUser();
   const { cartItems, cartProducts, refreshCart } = useCart();
+  const { products } = useProducts();
   const router = useRouter();
 
   // Refresh cart when cart is opened
@@ -129,6 +136,24 @@ function Navbar() {
     }
   };
 
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    if (query.length > 0) {
+      setIsSearching(true);
+      setTimeout(() => {
+        const results =
+          products?.filter((product) =>
+            product.name?.toLowerCase().includes(query.toLowerCase()),
+          ) || [];
+        setSearchResults(results);
+        setIsSearching(false);
+      }, 300);
+    } else {
+      setSearchResults([]);
+      setIsSearching(false);
+    }
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -204,6 +229,12 @@ function Navbar() {
 
       {/* Actions */}
       <div className="flex gap-x-10 mr-5 items-center">
+        <button onClick={() => setSearchOpen(true)} className="cursor-pointer">
+          <Search
+            className={`${scrolled ? currentStyle.scrollIcon : currentStyle.iconStyle} transition-colors`}
+            size={20}
+          />
+        </button>
         {/* <Link href={user ? "/user" : "/signup"}>
           <User
             className={`${scrolled ? currentStyle.scrollIcon : currentStyle.iconStyle} transition-colors`}
@@ -330,6 +361,93 @@ function Navbar() {
               >
                 Checkout
               </button>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Search Modal */}
+      {searchOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/50 z-50 h-screen"
+        >
+          <div className="absolute top-0 left-0 right-0 bg-background shadow-xl flex flex-col max-h-screen">
+            {/* Search Header */}
+            <div className="flex items-center gap-4 p-6 border-b border-border">
+              <button
+                onClick={() => {
+                  setSearchOpen(false);
+                  setSearchQuery("");
+                  setSearchResults([]);
+                }}
+                className="p-2 hover:bg-secondary rounded-lg transition-colors"
+              >
+                <X size={24} />
+              </button>
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
+                className="flex-1 bg-transparent border-none outline-none text-lg"
+                autoFocus
+              />
+            </div>
+
+            {/* Search Results */}
+            <div className="flex-1 overflow-y-auto p-6">
+              {isSearching ? (
+                <div className="flex items-center justify-center py-10">
+                  <p className="text-text/65">Searching...</p>
+                </div>
+              ) : searchResults.length > 0 ? (
+                <div className="flex flex-col gap-4">
+                  <p className="text-text/65 text-sm">
+                    {searchResults.length} result
+                    {searchResults.length !== 1 ? "s" : ""} found
+                  </p>
+                  <div className="flex gap-4 overflow-x-auto pb-4">
+                    {searchResults.map((product) => (
+                      <Link
+                        key={product.id}
+                        href={`/product/${product.id}`}
+                        onClick={() => {
+                          setSearchOpen(false);
+                          setSearchQuery("");
+                          setSearchResults([]);
+                        }}
+                        className="shrink-0 w-48 bg-secondary/50 hover:bg-secondary/70 rounded-lg p-4 transition-colors"
+                      >
+                        <div className="relative h-32 w-full mb-3">
+                          <Image
+                            src={product.image}
+                            fill
+                            alt={product.name}
+                            className="object-cover rounded-lg"
+                          />
+                        </div>
+                        <h3 className="font-semibold text-sm mb-1 line-clamp-2">
+                          {product.name}
+                        </h3>
+                        <p className="text-sm font-medium">
+                          PKR {product.discounted_price || product.price}
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : searchQuery.length > 0 ? (
+                <div className="flex items-center justify-center py-10">
+                  <p className="text-text/65">No products found</p>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center py-10">
+                  <p className="text-text/65">Start typing to search...</p>
+                </div>
+              )}
             </div>
           </div>
         </motion.div>
