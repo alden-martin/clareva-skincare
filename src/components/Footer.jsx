@@ -190,6 +190,7 @@ function Footer() {
                 key={social.name}
                 href={social.href}
                 aria-label={social.name}
+                target="_blank"
                 className="hover:text-primary transition"
               >
                 {social.icon}
