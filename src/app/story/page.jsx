@@ -209,8 +209,12 @@ export default function Story() {
 
             {/* Button Container */}
             <div className="flex gap-x-5 my-10">
-              <CtaButton>Discover Our Produc</CtaButton>
-              <OutlineButton>Build My Routine</OutlineButton>
+              <Link href="/shop">
+              <CtaButton>Discover Our Product</CtaButton>
+              </Link>
+              <Link href="/contact">
+              <OutlineButton>Contact Us</OutlineButton>
+              </Link>
             </div>
           </div>
 
