@@ -1,5 +1,5 @@
 "use client"
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import CtaButton from "./CtaButton";
@@ -16,13 +16,35 @@ const CARD_VARIANTS = {
   REGULAR: "regular",
 };
 
-function ProductCarousel({ 
-  products, 
+function ProductCarousel({
+  products,
   variant = CARD_VARIANTS.REGULAR,
   showNavigation = true,
   slidesPerView = { mobile: 1, tablet: 2, desktop: 3 },
 }) {
   const swiperRef = useRef(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentSlidesPerView, setCurrentSlidesPerView] = useState(
+    slidesPerView.mobile,
+  );
+
+  useEffect(() => {
+    const updateSlidesPerView = () => {
+      if (typeof window !== "undefined") {
+        if (window.innerWidth >= 1024) {
+          setCurrentSlidesPerView(slidesPerView.desktop);
+        } else if (window.innerWidth >= 768) {
+          setCurrentSlidesPerView(slidesPerView.tablet);
+        } else {
+          setCurrentSlidesPerView(slidesPerView.mobile);
+        }
+      }
+    };
+
+    updateSlidesPerView();
+    window.addEventListener("resize", updateSlidesPerView);
+    return () => window.removeEventListener("resize", updateSlidesPerView);
+  }, [slidesPerView]);
 
   const renderBundleCard = (product) => (
     <div className="bg-primary-foreground flex flex-col rounded-2xl h-full">
@@ -147,49 +169,55 @@ function ProductCarousel({
 
   if (!products || products.length === 0) return null;
 
+  const canSlidePrev = currentIndex > 0;
+  const canSlideNext = currentIndex + currentSlidesPerView < products.length;
+
   return (
-    <div className="flex items-center gap-4 w-full">
+    <div className="relative w-full">
+      <Swiper
+        ref={swiperRef}
+        spaceBetween={20}
+        slidesPerView={slidesPerView.mobile}
+        modules={[Navigation]}
+        onSlideChange={(swiper) => setCurrentIndex(swiper.activeIndex)}
+        breakpoints={{
+          0: {
+            slidesPerView: slidesPerView.mobile,
+          },
+          768: {
+            slidesPerView: slidesPerView.tablet,
+          },
+          1024: {
+            slidesPerView: slidesPerView.desktop,
+          },
+        }}
+        className="w-full"
+      >
+        {products.map((product, index) => (
+          <SwiperSlide key={index} className="h-auto">
+            {renderCard(product)}
+          </SwiperSlide>
+        ))}
+      </Swiper>
       {showNavigation && products.length > 1 && (
-        <button
-          onClick={() => swiperRef.current?.swiper?.slidePrev()}
-          className="bg-white border border-black p-3 rounded-full hover:bg-black hover:text-white transition-all shadow-md shrink-0"
-        >
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-      )}
-      <div className="flex-1 overflow-hidden">
-        <Swiper
-          ref={swiperRef}
-          spaceBetween={20}
-          slidesPerView={slidesPerView.mobile}
-          modules={[Navigation]}
-          breakpoints={{
-            0: {
-              slidesPerView: slidesPerView.mobile,
-            },
-            768: {
-              slidesPerView: slidesPerView.tablet,
-            },
-            1024: {
-              slidesPerView: slidesPerView.desktop,
-            },
-          }}
-          className="w-full"
-        >
-          {products.map((product, index) => (
-            <SwiperSlide key={index} className="h-auto">
-              {renderCard(product)}
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
-      {showNavigation && products.length > 1 && (
-        <button
-          onClick={() => swiperRef.current?.swiper?.slideNext()}
-          className="bg-white border border-black p-3 rounded-full hover:bg-black hover:text-white transition-all shadow-md shrink-0"
-        >
-          <ArrowRight className="w-5 h-5" />
-        </button>
+        <>
+          {canSlidePrev && (
+            <button
+              onClick={() => swiperRef.current?.swiper?.slidePrev()}
+              className="absolute -left-5 lg:left-2 top-1/2 -translate-y-1/2 z-10 text-black hover:opacity-70 transition-opacity"
+            >
+              <ArrowLeft className="w-8 h-8" />
+            </button>
+          )}
+          {canSlideNext && (
+            <button
+              onClick={() => swiperRef.current?.swiper?.slideNext()}
+              className="absolute -right-5  lg:right-2 top-1/2 -translate-y-1/2 z-10 text-black hover:opacity-70 transition-opacity"
+            >
+              <ArrowRight className="w-8 h-8" />
+            </button>
+          )}
+        </>
       )}
     </div>
   );

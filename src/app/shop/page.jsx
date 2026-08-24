@@ -130,14 +130,14 @@ function page() {
       </section>
       {/* Bundles */}
       {bundles?.length > 0 && (
-        <section className="py-20 px-5 lg:px-20 flex flex-col gap-y-5 bg-secondary"
+        <section className="py-20 px-10 lg:px-20 flex flex-col gap-y-5 bg-secondary"
         id="bundles"
         >
           <Heading
             subHeading={"Curated together"}
             mainHeading={"Curated Skincare Bundles"}
           />
-          <p className="text-text/70 w-1/2">
+          <p className="text-text/70 w-full lg:w-1/2">
             Save more with complete skincare routines designed to work together
             for healthier, glowing skin.
           </p>

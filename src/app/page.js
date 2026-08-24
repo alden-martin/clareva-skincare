@@ -242,7 +242,7 @@ export default function Home() {
         </div>
       </div>
       {/* Product Line */}
-      <section className="flex justify-between items-center px-0 flex-wrap lg:flex-nowrap gap-y-3 lg:gap-y-0 lg:px-10 py-5">
+      {/* <section className="flex justify-between items-center px-0 flex-wrap lg:flex-nowrap gap-y-3 lg:gap-y-0 lg:px-10 py-5">
         {productLine.map((line, index) => (
           <Link
             href="/shop/#all-products"
@@ -264,7 +264,7 @@ export default function Home() {
             </p>
           </Link>
         ))}
-      </section>
+      </section> */}
       {/* The Edit */}
       <section className="flex flex-col gap-y-10 px-10 py-20 bg-background ">
         <Heading

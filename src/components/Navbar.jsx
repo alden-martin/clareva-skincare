@@ -35,14 +35,20 @@ function Navbar() {
   useEffect(() => {
     if (cartOpen) {
       refreshCart();
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
     }
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [cartOpen]);
   // Configuration for navbar styles per page
   const navbarStyles = {
     "/": {
       default:
         "bg-linear-to-r from-hero-background/50 lg:from-hero-background to-transparent to-30%",
-      scrolled: "bg-background/70 backdrop-blur-sm",
+      scrolled: "bg-background",
       iconStyle: "text-white hover:text-white",
       scrollIcon: "text-text/65 hover:text-text",
     },
@@ -50,37 +56,37 @@ function Navbar() {
     "/product": {
       match: "startsWith",
       default: "bg-secondary/90",
-      scrolled: "bg-background/90",
+      scrolled: "bg-background",
       iconStyle: "text-white hover:text-white",
       scrollIcon: "text-text/65 hover:text-text",
     },
     "/story": {
       default: "bg-secondary",
-      scrolled: "bg-background/90",
+      scrolled: "bg-background",
       iconStyle: "text-white hover:text-white",
       scrollIcon: "text-text/65 hover:text-text",
     },
     "/contact": {
       default: "bg-linear-to-r from-hero-background to-transparent to-30%",
-      scrolled: "bg-background/90",
+      scrolled: "bg-background",
       iconStyle: "text-white hover:text-white",
       scrollIcon: "text-text/65 hover:text-text",
     },
     "/shop": {
       default: "bg-linear-to-r from-hero-background to-transparent to-30%",
-      scrolled: "bg-background/90",
+      scrolled: "bg-background",
       iconStyle: "text-white hover:text-white",
       scrollIcon: "text-text/65 hover:text-text",
     },
     "/user": {
       default: "bg-background",
-      scrolled: "bg-background/80",
+      scrolled: "bg-background",
       iconStyle: "text-text/65 hover:text-text",
       scrollIcon: "text-text/65 hover:text-text",
     },
     "/checkout": {
       default: "bg-card",
-      scrolled: "bg-background/80",
+      scrolled: "bg-background",
       iconStyle: "text-text/65 hover:text-text",
       scrollIcon: "text-text/65 hover:text-text",
     },
@@ -198,86 +204,92 @@ function Navbar() {
   ];
 
   return (
-    <nav
-      className={`flex justify-between items-center p-6 fixed w-full z-50 max-w-screen ${
-        scrolled ? currentStyle.scrolled : currentStyle.default
-      }`}
-    >
-      {/* Logo */}
-      <div className="flex gap-x-14 items-center">
-        <Link href={"/"}>
-          <h1 className="serif text-4xl tracking-tight text-foreground font-bold">
-            Claréva
-          </h1>
-        </Link>
-        {/* Desktop Navigation */}
-        <ul className="hidden lg:flex gap-x-14">
-          {pages.map((page, idx) => (
-            <li key={idx}>
-              <Link
-                className={
-                  "text-text/65 hover:text-text transition-colors text-[14px] font-body uppercase"
-                }
-                href={page.href}
-              >
-                {page.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+    <>
+      <nav
+        className={`flex justify-between items-center p-6 w-full z-50 ${
+          scrolled ? currentStyle.scrolled : currentStyle.default
+        }`}
+        style={{ position: "fixed", top: 0, left: 0, right: 0 }}
+      >
+        {/* Logo */}
+        <div className="flex gap-x-14 items-center">
+          <Link href={"/"}>
+            <h1 className="serif text-4xl tracking-tight text-foreground font-bold">
+              Claréva
+            </h1>
+          </Link>
+          {/* Desktop Navigation */}
+          <ul className="hidden lg:flex gap-x-14">
+            {pages.map((page, idx) => (
+              <li key={idx}>
+                <Link
+                  className={
+                    "text-text/65 hover:text-text transition-colors text-[14px] font-body uppercase"
+                  }
+                  href={page.href}
+                >
+                  {page.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-      {/* Actions */}
-      <div className="flex gap-x-10 mr-5 items-center">
-        <button onClick={() => setSearchOpen(true)} className="cursor-pointer">
-          <Search
-            className={`${scrolled ? currentStyle.scrollIcon : currentStyle.iconStyle} transition-colors`}
-            size={20}
-          />
-        </button>
-        {/* <Link href={user ? "/user" : "/signup"}>
+        {/* Actions */}
+        <div className="flex gap-x-10 mr-5 items-center">
+          <button
+            onClick={() => setSearchOpen(true)}
+            className="cursor-pointer"
+          >
+            <Search
+              className={`${scrolled ? currentStyle.scrollIcon : currentStyle.iconStyle} transition-colors`}
+              size={20}
+            />
+          </button>
+          {/* <Link href={user ? "/user" : "/signup"}>
           <User
             className={`${scrolled ? currentStyle.scrollIcon : currentStyle.iconStyle} transition-colors`}
             size={20}
           />
         </Link> */}
-        <button
-          onClick={() => {
-            // if (!user) {
-            //   router.push("/login");
-            // }
-            setCartOpen(true);
-            console.log(cartProducts);
-          }}
-          className="relative cursor-pointer"
-        >
-          <ShoppingCart
-            className={`${scrolled ? currentStyle.scrollIcon : currentStyle.iconStyle} transition-colors`}
-            size={20}
-          />
-          {getTotalCartCount() > 0 && (
-            <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center">
-              {getTotalCartCount()}
-            </span>
-          )}
-        </button>
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="lg:hidden"
-        >
-          <Menu
-            className={`${scrolled ? "text-text/65 hover:text-text" : "text-white hover:text-white"} transition-colors`}
-            size={20}
-          />
-        </button>
-      </div>
+          <button
+            onClick={() => {
+              // if (!user) {
+              //   router.push("/login");
+              // }
+              setCartOpen(true);
+              console.log(cartProducts);
+            }}
+            className="relative cursor-pointer"
+          >
+            <ShoppingCart
+              className={`${scrolled ? currentStyle.scrollIcon : currentStyle.iconStyle} transition-colors`}
+              size={20}
+            />
+            {getTotalCartCount() > 0 && (
+              <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                {getTotalCartCount()}
+              </span>
+            )}
+          </button>
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden"
+          >
+            <Menu
+              className={`${scrolled ? "text-text/65 hover:text-text" : "text-white hover:text-white"} transition-colors`}
+              size={20}
+            />
+          </button>
+        </div>
+      </nav>
       {/* Cart */}
       {cartOpen && (
         <motion.div
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 100 }}
-          className="fixed inset-0 bg-black/50 z-50 h-screen"
+          className="fixed inset-0 bg-black/50 z-[9999]"
         >
           <div className="absolute right-0 top-0 h-full w-full max-w-md bg-background shadow-xl flex flex-col">
             {/* Cart Header */}
@@ -492,7 +504,7 @@ function Navbar() {
           </div>
         </motion.div>
       )}
-    </nav>
+    </>
   );
 }
 
