@@ -4,7 +4,7 @@ import Heading from "@/components/Heading";
 import OutlineButton from "@/components/OutlineButton";
 import Image from "next/image";
 import { FlaskConical, Sparkles, Sun, HeartHandshake, Check, Droplets, WandSparkles, ShieldCheck, Leaf } from "lucide-react";
-
+import Link from "next/link";
 
 export default function Story() {
   const philosophyCards = [
