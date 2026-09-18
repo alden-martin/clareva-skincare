@@ -7,6 +7,7 @@ import { Badge } from './ui/badge';
 import { supabase } from "@/lib/supabaseClient";
 import toast from "react-hot-toast";
 import emailjs from "@emailjs/browser";
+import { trackMetaEvent } from '@/lib/metaPixel';
 
 function CheckoutModal({
   open,
@@ -105,10 +106,9 @@ function CheckoutModal({
       email: customerDetails?.email || null,
     });
     if (orderError) {
-      console.log(orderError);
-
       toast.error(orderError.message);
     } else {
+      trackMetaEvent("Purchase", { value: total, currency: "PKR" });
       // Send order confirmation email (fire and forget, won't block user)
       sendOrderEmail();
       // Clear cart after successful order

@@ -9,6 +9,7 @@ import { toast } from "react-hot-toast";
 import { supabase } from "@/lib/supabaseClient";
 import { addToCart } from "@/utils/shop";
 import { useCart } from "@/contexts/CartContext";
+import { trackMetaEvent } from "@/lib/metaPixel";
 
 function Page() {
   const { id } = useParams();
@@ -64,6 +65,13 @@ function Page() {
       }
     }
     setLoading(false);
+    trackMetaEvent("ViewContent", {
+      content_name: product.name,
+      content_ids: [id],
+      content_type: "product",
+      value: parseFloat(product.price.replace(/[^0-9.]/g, "")),
+      currency: "PKR",
+    });
   };
 
   useEffect(() => {

@@ -15,6 +15,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useUser } from "@/contexts/UserContext";
 import { useCart } from "@/contexts/CartContext";
 import { useProducts } from "@/contexts/ProductContext";
+import { trackMetaEvent } from "@/lib/metaPixel";
 import Image from "next/image";
 import toast from "react-hot-toast";
 function Navbar() {
@@ -92,6 +93,13 @@ function Navbar() {
     },
     // Add more pathnames as needed
   };
+
+  useEffect(()=>{
+    if (searchOpen) {
+      trackMetaEvent();
+    }
+
+  } , [searchOpen])
 
   // Get style for current pathname, supports exact match and startsWith for dynamic routes
   const currentStyle = Object.entries(navbarStyles).find(([key, value]) => {

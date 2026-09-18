@@ -1,4 +1,5 @@
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabaseClient"; 
+import {trackMetaEvent} from "@/lib/metaPixel"
 import toast from "react-hot-toast";
 
 const addToCart = async (id, quantity = 1, size = null, refreshCart = null) => {
@@ -28,6 +29,9 @@ const addToCart = async (id, quantity = 1, size = null, refreshCart = null) => {
 
     // Save to localStorage
     localStorage.setItem("clarevaCart", JSON.stringify(updatedCart));
+
+    // Track meta event
+    trackMetaEvent("AddToCart", { value: quantity, currency: "PKR" });
 
     // Refresh cart in context if refreshCart function is provided
     if (refreshCart) {
