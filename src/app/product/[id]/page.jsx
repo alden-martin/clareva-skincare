@@ -20,7 +20,8 @@ function Page() {
   const [product, setProduct] = useState({
     name: "",
     tagline: "",
-    price: "",
+    price: [],
+    discounted_price: [],
     image: "",
     description: "",
     benifits: [],
@@ -37,6 +38,23 @@ function Page() {
   const [openSection, setOpenSection] = useState("description");
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState("");
+
+  // Get price for selected size
+  const getPriceForSize = (size) => {
+    const sizeIndex = product.size?.indexOf(size);
+    if (sizeIndex === -1 || sizeIndex === undefined) return null;
+    return {
+      price: product.price[sizeIndex],
+      discounted_price: product.discounted_price?.[sizeIndex],
+    };
+  };
+
+  // Get current price based on selected size
+  const currentPrice = selectedSize
+    ? getPriceForSize(selectedSize)
+    : product.size?.length > 0
+      ? getPriceForSize(product.size[0])
+      : null;
 
   // Fetch product from Supabase
   const fetchProduct = async () => {
@@ -65,11 +83,19 @@ function Page() {
       }
     }
     setLoading(false);
+    const priceToTrack =
+      currentPrice?.discounted_price &&
+      currentPrice.discounted_price !== "0" &&
+      currentPrice.discounted_price !== 0
+        ? currentPrice.discounted_price
+        : currentPrice?.price;
     trackMetaEvent("ViewContent", {
       content_name: product.name,
       content_ids: [id],
       content_type: "product",
-      value: parseFloat(product.price.replace(/[^0-9.]/g, "")),
+      value: priceToTrack
+        ? parseFloat(String(priceToTrack).replace(/[^0-9.]/g, ""))
+        : 0,
       currency: "PKR",
     });
   };
@@ -190,7 +216,21 @@ function Page() {
         <div className="flex flex-col items-start my-5 gap-y-1">
           <h1 className="text-4xl font-bold">{product.name}</h1>
           <p className="text-sm text-text/50">{product.tagline}</p>
-          <p className="text-lg font-semibold">PKR {product.price}</p>
+          {currentPrice && (
+            <>
+              {currentPrice.discounted_price &&
+              currentPrice.discounted_price !== "0" &&
+              currentPrice.discounted_price !== 0 ? (
+                <p className="text-lg font-semibold">
+                  PKR {currentPrice.discounted_price}
+                </p>
+              ) : (
+                <p className="text-lg font-semibold">
+                  PKR {currentPrice.price}
+                </p>
+              )}
+            </>
+          )}
 
           {/* Display first size if array, or all */}
           <div className="flex flex-row items-start gap-x-2">
@@ -239,23 +279,35 @@ function Page() {
             ))}
           </div>
           {/* Size Select */}
-          {product.size && product.size.length > 1 && (
+          {product.size && product.size.length > 0 && (
             <div className="mt-4">
               <h4 className="font-bold text-base mb-2">Select Size:</h4>
               <div className="flex flex-wrap gap-2">
-                {product.size.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`px-4 py-2 border rounded-lg transition-colors ${
-                      selectedSize === size
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-secondary-foreground hover:border-primary"
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ))}
+                {product.size.map((size, index) => {
+                  const sizePrice = getPriceForSize(size);
+                  return (
+                    <button
+                      key={size}
+                      onClick={() => setSelectedSize(size)}
+                      className={`px-4 py-2 border rounded-lg transition-colors ${
+                        selectedSize === size
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-secondary-foreground hover:border-primary"
+                      }`}
+                    >
+                      {size}
+                      {sizePrice && (
+                        <span className="ml-2">
+                          {sizePrice.discounted_price &&
+                          sizePrice.discounted_price !== "0" &&
+                          sizePrice.discounted_price !== 0
+                            ? `PKR ${sizePrice.discounted_price}`
+                            : `PKR ${sizePrice.price}`}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -292,7 +344,7 @@ function Page() {
                   return;
                 }
                 try {
-                  await addToCart(  
+                  await addToCart(
                     product.id,
                     quantity,
                     selectedSize,
