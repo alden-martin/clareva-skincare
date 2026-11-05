@@ -120,7 +120,11 @@ function Navbar() {
 
   const getSubtotal = () => {
     return cartProducts.reduce((total, product) => {
-      const priceString = product.price || "0";
+      const priceData = product.price || "0";
+      // Handle price as array or string
+      const priceString = Array.isArray(priceData)
+        ? priceData[0] || "0"
+        : priceData;
       // Extract numeric value from price string (e.g., "PKR 1000" -> 1000)
       const priceMatch = priceString.match(/[\d,]+\.?\d*/);
       const price = priceMatch
@@ -313,53 +317,58 @@ function Navbar() {
 
             {/* Cart Items */}
             <div className="flex-1 overflow-y-auto p-6">
-              {cartProducts.length === 0 ? (
+              {cartItems.length === 0 ? (
                 <p className="text-text/65 text-center py-10">
                   Your cart is empty
                 </p>
               ) : (
                 <div className="flex flex-col gap-4">
-                  {cartProducts.map((product, index) => (
-                    <div
-                      key={`${product.id}-${product.size || "default"}-${index}`}
-                      className="flex gap-4 p-4 bg-secondary/50 hover:bg-secondary/70 rounded-lg"
-                    >
-                      <div className="w-20 h-20 bg-background rounded-lg flex items-center justify-center">
-                        {product.image ? (
-                          <img
-                            src={product.image}
-                            alt={product.name}
-                            className="w-full h-full object-cover rounded-lg"
-                          />
-                        ) : (
-                          <span className="text-text/65 text-xs">No image</span>
-                        )}
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold">
-                          {product.name || "Product"}
-                        </h3>
-                        <p className="text-sm text-text/65">
-                          {product.price || "Price not available"}
-                        </p>
-                        <p className="text-sm font-medium">
-                          Qty: {product.amount || 0}
-                        </p>
-                        {product.size && typeof product.size === "string" && (
-                          <p className="text-xs text-text/50 mt-1">
-                            Size: {product.size}
-                          </p>
-                        )}
-                      </div>
-                      <button
-                        onClick={() => deleteCartItem(product.id, product.size)}
-                        className="p-2 hover:bg-destructive/10 text-text/65 hover:text-destructive rounded-lg transition-colors"
-                        title="Remove from cart"
+                  {cartItems.map((item, index) => {
+                    const product = cartProducts[index];
+                    return (
+                      <div
+                        key={`${item.id}-${item.size || "default"}-${index}`}
+                        className="flex gap-4 p-4 bg-secondary/50 hover:bg-secondary/70 rounded-lg"
                       >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  ))}
+                        <div className="w-20 h-20 bg-background rounded-lg flex items-center justify-center">
+                          {product?.image ? (
+                            <img
+                              src={product.image}
+                              alt={product.name}
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                          ) : (
+                            <span className="text-text/65 text-xs">
+                              No image
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold">
+                            {product?.name || `Product #${item.id}`}
+                          </h3>
+                          <p className="text-sm text-text/65">
+                            {product?.price || "Price not available"}
+                          </p>
+                          <p className="text-sm font-medium">
+                            Qty: {item.amount || 0}
+                          </p>
+                          {item.size && typeof item.size === "string" && (
+                            <p className="text-xs text-text/50 mt-1">
+                              Size: {item.size}
+                            </p>
+                          )}
+                        </div>
+                        <button
+                          onClick={() => deleteCartItem(item.id, item.size)}
+                          className="p-2 hover:bg-destructive/10 text-text/65 hover:text-destructive rounded-lg transition-colors"
+                          title="Remove from cart"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>

@@ -27,13 +27,22 @@ export function CartProvider({ children }) {
           const product = await getProduct(item.id);
           return { ...product, amount: item.amount, size: item.size };
         } catch (error) {
-          console.error("Error fetching product:", error);
+          console.error("Error fetching product:", item.id, error);
           return null;
         }
       });
 
       const products = await Promise.all(productPromises);
-      setCartProducts(products.filter((p) => p !== null));
+      const validProducts = products.filter((p) => p !== null);
+      setCartProducts(validProducts);
+
+      console.log(
+        "Cart loaded:",
+        cartData.length,
+        "items,",
+        validProducts.length,
+        "products fetched",
+      );
     } catch (error) {
       console.error("Cart fetch error:", error);
       setCartItems([]);

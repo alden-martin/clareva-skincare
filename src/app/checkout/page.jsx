@@ -232,7 +232,10 @@ function page() {
               Rs.{" "}
               {cartProducts
                 .reduce((total, product) => {
-                  const priceString = product.price || "0";
+                  const priceData = product.price || "0";
+                  const priceString = Array.isArray(priceData)
+                    ? priceData[0] || "0"
+                    : priceData;
                   const priceMatch = priceString.match(/[\d,]+\.?\d*/);
                   const price = priceMatch
                     ? parseFloat(priceMatch[0].replace(/,/g, ""))
@@ -421,7 +424,10 @@ function page() {
         customerDetails={customerDetails}
         total={getTotal(
           cartProducts.reduce((total, product) => {
-            const priceString = product.price || "0";
+            const priceData = product.price || "0";
+            const priceString = Array.isArray(priceData)
+              ? priceData[0] || "0"
+              : priceData;
             const priceMatch = priceString.match(/[\d,]+\.?\d*/);
             const price = priceMatch
               ? parseFloat(priceMatch[0].replace(/,/g, ""))
@@ -430,7 +436,10 @@ function page() {
           }, 0),
           getDiscount(
             cartProducts.reduce((total, product) => {
-              const priceString = product.price || "0";
+              const priceData = product.price || "0";
+              const priceString = Array.isArray(priceData)
+                ? priceData[0] || "0"
+                : priceData;
               const priceMatch = priceString.match(/[\d,]+\.?\d*/);
               const price = priceMatch
                 ? parseFloat(priceMatch[0].replace(/,/g, ""))
